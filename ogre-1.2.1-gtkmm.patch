@@ -1,0 +1,47 @@
+diff -ur ogrenew/PlatformManagers/SDL/include/OgreSDLConfig_gtk.h ogrenew.new/PlatformManagers/SDL/include/OgreSDLConfig_gtk.h
+--- ogrenew/PlatformManagers/SDL/include/OgreSDLConfig_gtk.h	2005-02-04 18:50:41.000000000 +0100
++++ ogrenew.new/PlatformManagers/SDL/include/OgreSDLConfig_gtk.h	2006-06-16 22:30:36.000000000 +0200
+@@ -40,7 +40,7 @@
+ 
+ namespace Ogre {
+     /** GTK+ config */
+-    class SDLConfig : public ConfigDialog, public SigC::Object
++    class SDLConfig : public ConfigDialog, public sigc::trackable
+     {
+     public:
+         SDLConfig()
+diff -ur ogrenew/PlatformManagers/SDL/src/OgreSDLConfig_gtk.cpp ogrenew.new/PlatformManagers/SDL/src/OgreSDLConfig_gtk.cpp
+--- ogrenew/PlatformManagers/SDL/src/OgreSDLConfig_gtk.cpp	2006-01-26 13:38:24.000000000 +0100
++++ ogrenew.new/PlatformManagers/SDL/src/OgreSDLConfig_gtk.cpp	2006-06-16 22:30:00.000000000 +0200
+@@ -23,6 +23,7 @@
+ */
+ 
+ #include "OgreSDLConfig.h"
++#include "OgreLogManager.h"
+ 
+ #include <libglademm/xml.h>
+ 
+@@ -65,17 +66,16 @@
+     _opt_menu = NULL;
+ 
+     // Hookup signals
+-    _winConfig->signal_delete_event().connect(SigC::slot(*this,
+-                &SDLConfig::on_window_delete));
++    _winConfig->signal_delete_event().connect(sigc::mem_fun(this, &SDLConfig::on_window_delete));
+     _option_selection = _lstOptions->get_selection();
+-    _option_selection->signal_changed().connect(SigC::slot(*this,
++    _option_selection->signal_changed().connect(sigc::mem_fun(this,
+                 &SDLConfig::on_option_changed));
+-    _optRenderer->signal_changed().connect(SigC::slot(*this,
++    _optRenderer->signal_changed().connect(sigc::mem_fun(this,
+                 &SDLConfig::on_renderer_changed));
+-    _optOptValues->signal_changed().connect(SigC::slot(*this,
++    _optOptValues->signal_changed().connect(sigc::mem_fun(this,
+                 &SDLConfig::on_value_changed));
+-    btn_ok->signal_clicked().connect(SigC::slot(*this, &SDLConfig::on_btn_ok));
+-    btn_cancel->signal_clicked().connect(SigC::slot(&Gtk::Main::quit));
++    btn_ok->signal_clicked().connect(sigc::mem_fun(this, &SDLConfig::on_btn_ok));
++    btn_cancel->signal_clicked().connect(sigc::ptr_fun(&Gtk::Main::quit));
+ 
+ 
+     // Initialize
