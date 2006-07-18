@@ -1,0 +1,11 @@
+--- ogrenew/OgreMain/include/OgrePlatform.h~	2006-07-18 20:36:22.000000000 +0200
++++ ogrenew/OgreMain/include/OgrePlatform.h	2006-07-18 20:36:22.000000000 +0200
+@@ -150,7 +150,7 @@
+ #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+ 
+ // Enable GCC 4.0 symbol visibility
+-#   if OGRE_COMP_VER >= 400
++#   if 0
+ #       define _OgreExport  __attribute__ ((visibility("default")))
+ #       define _OgrePrivate __attribute__ ((visibility("hidden")))
+ #   else

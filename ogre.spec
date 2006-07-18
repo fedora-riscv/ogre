@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
@@ -9,6 +9,7 @@ Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{versi
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.2.1-gtkmm.patch
 Patch2:         ogre-1.2.1-char_height.patch
+Patch3:         ogre-1.2.1-visibility.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel SDL-devel freetype-devel
 BuildRequires:  libglademm24-devel libsigc++20-devel
@@ -48,6 +49,7 @@ manual. Install this package if you want to develop programs that use Ogre.
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .gtkmm
 %patch2 -p1 -z .char_height
+%patch3 -p1 -z .visibility
 # we don't do this with a patch since we need %{_libdir}
 sed -i 's|libOgrePlatform.so|%{_libdir}/OGRE/libOgrePlatform.so|' \
   OgreMain/include/OgrePlatform.h
@@ -122,6 +124,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 18 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.1-3
+- Add ogre-1.2.1-visibility.patch to fix issues with the interesting new
+  gcc visibility inheritance.
+
 * Fri Jul  7 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.1-2
 - Make -devel package Requires on the main package fully versioned.
 - Move libOgrePlatform.so out of %%{_libdir} and into the OGRE plugins dirs as
