@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.2.2
-Release:        1.%{version_postfix}%{?dist}
+Release:        2.%{version_postfix}%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
@@ -130,6 +130,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 28 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.2-2.p1
+- FE6 Rebuild
+
 * Thu Jul 27 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.2-1.p1
 - New upstream release 1.2.2p1
 - Drop integrated char_height patch
