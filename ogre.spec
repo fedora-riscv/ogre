@@ -1,16 +1,13 @@
-%define version_postfix p1
-
 Name:           ogre
-Version:        1.2.2
-Release:        2.%{version_postfix}%{?dist}
+Version:        1.2.3
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{version} | tr . -)%{version_postfix}.tar.bz2
+Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
 Patch0:         ogre-1.2.1-rpath.patch
-Patch1:         ogre-1.2.1-gtkmm.patch
-Patch2:         ogre-1.2.2-soname.patch
+Patch1:         ogre-1.2.2-soname.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel SDL-devel freetype-devel
 BuildRequires:  libglademm24-devel libsigc++20-devel
@@ -48,8 +45,7 @@ manual. Install this package if you want to develop programs that use Ogre.
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
-%patch1 -p1 -z .gtkmm
-%patch2 -p1 -z .soname
+%patch1 -p1 -z .soname
 # sigh stop autoxxx from rerunning because of our patches above.
 touch aclocal.m4
 touch configure
@@ -130,6 +126,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 27 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.3-1
+- New upstream release 1.2.3
+- Warning as always with a new upstream ogre release this breaks the ABI
+  and changes the soname!
+
 * Mon Aug 28 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.2-2.p1
 - FE6 Rebuild
 
