@@ -1,11 +1,12 @@
 Name:           ogre
 Version:        1.2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
+Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.2.2-soname.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -42,6 +43,17 @@ This package contains the Ogre API documentation and the Ogre development
 manual. Install this package if you want to develop programs that use Ogre.
 
 
+%package samples
+Summary: Ogre samples executables and media.
+Group:  Documentation
+
+%description samples
+This package contains the compiled (not the source) sample applications coming
+with Ogre.  It also contains some media (meshes, textures,...) needed by these
+samples. The samples are installed in %{_libdir}/Samples and must be executed
+from this directory!
+
+
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
@@ -54,9 +66,13 @@ touch OgreMain/include/config.h.in
 # we don't do this with a patch since we need %{_libdir}
 sed -i 's|libOgrePlatform.so|%{_libdir}/OGRE/libOgrePlatform.so|' \
   OgreMain/include/OgrePlatform.h
-rm -fr `find Docs -name CVS`
+# stop some CVS dirs from getting installed
+rm -fr `find Docs Samples/Media -name CVS`
 #remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f`
+# Fix path to Media files for the Samples
+sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
+  Samples/Common/bin/resources.cfg
 
 
 %build
@@ -94,6 +110,21 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Media
 install -p -m 644 Samples/Media/materials/textures/ogrelogo-small.jpg \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Media
 
+# Install the samples
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+for exe in `find Samples/Common/bin -type f -perm +111 -print -maxdepth 1`
+do
+  install -p -m 755 $exe $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+done
+for cfg in `find Samples/Common/bin -name \*.cfg -print -maxdepth 1`
+do
+  install -p -m 644 $cfg $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+done
+install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
+
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
+cp -a Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -112,6 +143,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lib*Ogre*-%{version}.so
 %{_libdir}/OGRE
 %{_datadir}/OGRE
+%exclude %{_bindir}/Ogre-Samples
+%exclude %{_libdir}/OGRE/Samples
+%exclude %{_datadir}/OGRE/Samples
 
 %files devel
 %defattr(-,root,root,-)
@@ -124,8 +158,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc LINUX.DEV Docs/api Docs/manual Docs/vbo-update Docs/style.css
 
+%files samples
+%defattr(-,root,root)
+%{_bindir}/Ogre-Samples
+%{_libdir}/OGRE/Samples
+%{_datadir}/OGRE/Samples
+
 
 %changelog
+* Fri Jan 19 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.3-2
+- Rebuild for new cairomm
+- Added a samples sub-package (suggested by Xavier Decoret)
+
 * Fri Oct 27 2006 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.3-1
 - New upstream release 1.2.3
 - Warning as always with a new upstream ogre release this breaks the ABI
