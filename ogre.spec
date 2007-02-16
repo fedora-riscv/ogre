@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.2.3
-Release:        2%{?dist}
+Version:        1.2.5
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
@@ -37,6 +37,7 @@ Install this package if you want to develop programs that use Ogre.
 %package devel-doc
 Summary:        Ogre development documentation
 Group:          Documentation
+Requires:       %{name} = %{version}-%{release}
 
 %description devel-doc
 This package contains the Ogre API documentation and the Ogre development
@@ -44,14 +45,15 @@ manual. Install this package if you want to develop programs that use Ogre.
 
 
 %package samples
-Summary: Ogre samples executables and media.
-Group:  Documentation
+Summary:        Ogre samples executables and media
+Group:          Development/Libraries
+Requires:       %{name} = %{version}-%{release}
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
 with Ogre.  It also contains some media (meshes, textures,...) needed by these
-samples. The samples are installed in %{_libdir}/Samples and must be executed
-from this directory!
+samples. The samples are installed in %{_libdir}/Samples and can be executed
+with the wrapper script called "Ogre-Samples".
 
 
 %prep
@@ -73,6 +75,13 @@ chmod -x `find RenderSystems/GL -type f`
 # Fix path to Media files for the Samples
 sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
   Samples/Common/bin/resources.cfg
+# building ogre with ogre installed leads to ogre linking the ogre apps
+# against the installed ogre version instead of the just build version, so 
+# check for this and barf.
+if [ -f /usr/include/OGRE/Ogre.h ]; then
+  echo "Error building OGRE while OGRE is installed doesn't work, remove OGRE"
+  exit 1
+fi
 
 
 %build
@@ -166,6 +175,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Feb 16 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-1
+- New upstream release 1.2.5
+
 * Fri Jan 19 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.3-2
 - Rebuild for new cairomm
 - Added a samples sub-package (suggested by Xavier Decoret)
