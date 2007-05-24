@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.2.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
@@ -9,6 +9,7 @@ Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{versi
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.2.2-soname.patch
+Patch2:         ogre-1.2.5-ppc64.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel SDL-devel freetype-devel
 BuildRequires:  libglademm24-devel libsigc++20-devel
@@ -60,6 +61,7 @@ with the wrapper script called "Ogre-Samples".
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .soname
+%patch2 -p1 -z .ppc64
 # sigh stop autoxxx from rerunning because of our patches above.
 touch aclocal.m4
 touch configure
@@ -175,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 24 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-2
+- Fix building on ppc64
+
 * Fri Feb 16 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-1
 - New upstream release 1.2.5
 
