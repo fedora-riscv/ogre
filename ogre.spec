@@ -11,7 +11,8 @@ Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.2.5-ppc64.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
-BuildRequires:  libXaw-devel libXrandr-devel libGLU-devel ois-devel
+BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
+BuildRequires:  ois-devel
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
