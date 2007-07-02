@@ -61,6 +61,8 @@ with the wrapper script called "Ogre-Samples".
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .ppc64
+# Don't try to build SSE optimised code on ppc64
+sed -i 's/\tpowerpc)$/\tpowerpc)\n\tpowerpc64)/g' configure
 # stop some CVS stuff from getting installed
 rm -r `find Docs Samples/Media -name CVS` 'Docs/manual/.#manual_16.html.1.47' \
   Docs/manual/manual_16.html.rej
