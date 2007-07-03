@@ -1,18 +1,18 @@
 Name:           ogre
-Version:        1.2.5
-Release:        2%{?dist}.1
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPL
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-Source0:        http://dl.sf.net/sourceforge/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
+Source0:        http://downloads.sourceforge.net/ogre/ogre-linux-osx-v%(echo %{version} | tr . -).tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
-Patch1:         ogre-1.2.2-soname.patch
-Patch2:         ogre-1.2.5-ppc64.patch
+Patch1:         ogre-1.2.5-ppc64.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  cegui-devel zziplib-devel DevIL-devel SDL-devel freetype-devel
-BuildRequires:  libglademm24-devel libsigc++20-devel
+BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
+BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
+BuildRequires:  ois-devel
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -60,38 +60,32 @@ with the wrapper script called "Ogre-Samples".
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
-%patch1 -p1 -z .soname
-%patch2 -p1 -z .ppc64
-# sigh stop autoxxx from rerunning because of our patches above.
-touch aclocal.m4
-touch configure
-touch `find -name Makefile.in`
-touch OgreMain/include/config.h.in
-# we don't do this with a patch since we need %{_libdir}
-sed -i 's|libOgrePlatform.so|%{_libdir}/OGRE/libOgrePlatform.so|' \
-  OgreMain/include/OgrePlatform.h
-# stop some CVS dirs from getting installed
-rm -fr `find Docs Samples/Media -name CVS`
-#remove execute bits from src-files for -debuginfo package
-chmod -x `find RenderSystems/GL -type f`
+%patch1 -p1 -z .ppc64
+# Don't try to build SSE optimised code on ppc64
+sed -i 's/\tpowerpc)$/\tpowerpc|powerpc64)/g' configure
+# stop some CVS stuff from getting installed
+rm -r `find Docs Samples/Media -name CVS` 'Docs/manual/.#manual_16.html.1.47' \
+  Docs/manual/manual_16.html.rej
+# fix line-endings of Docs
+sed -i 's/\r//g' Docs/manual/*.html
+# remove execute bits from src-files for -debuginfo package
+chmod -x `find RenderSystems/GL -type f` \
+  `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
 # Fix path to Media files for the Samples
 sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
   Samples/Common/bin/resources.cfg
-# building ogre with ogre installed leads to ogre linking the ogre apps
-# against the installed ogre version instead of the just build version, so 
-# check for this and barf.
-if [ -f /usr/include/OGRE/Ogre.h ]; then
-  echo "Error building OGRE while OGRE is installed doesn't work, remove OGRE"
-  exit 1
-fi
+# Remove spurious execute buts from some Media files
+chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
+  Samples/Media/overlays/Example-DynTex.overlay \
+  Samples/Media/gui/TaharezLook.looknfeel \
+  Samples/Media/gui/Falagard.xsd \
+  Samples/Media/materials/scripts/Example-DynTex.material
 
 
 %build
-# Upstream advises --with-platform=GLX, but that uses Xrandr for fullscreen,
-# which has issues (see bz 190918).
-# Notice that if we switch back to GLX --with-cfgtk=gtk can be removed and so
-# can the libglademm24-devel and libsigc++20-devel BuildRequires.
-%configure --with-platform=SDL --with-cfgtk=gtk --disable-cg
+# notice we disable freeimage (and thus use DevIL) because freeimage
+# is GPL not LGPL
+%configure --disable-cg --disable-freeimage
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -101,32 +95,15 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
-rm -f $RPM_BUILD_ROOT%{_libdir}/OGRE/*.la
-# move libOgrePlatform.so out of %{_libdir} and into the OGRE plugins dirs as
-# its not versioned and only used through dlopen, so its effectivly a plugin.
-mv $RPM_BUILD_ROOT%{_libdir}/libOgrePlatform.so $RPM_BUILD_ROOT%{_libdir}/OGRE
-
-# fix rpm-debuginfo not handling symlinks correctly <sigh> see BZ 189928
-pushd PlatformManagers/SDL
-rm src/OgreSDLConfig.cpp
-cp src/OgreSDLConfig_gtk.cpp src/OgreSDLConfig.cpp
-rm include/OgreSDLConfig.h
-cp include/OgreSDLConfig_gtk.h include/OgreSDLConfig.h
-popd
-
-# the gtk-configurator wants this file and it doesn't get installed
-# by make install so DYI
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Media
-install -p -m 644 Samples/Media/materials/textures/ogrelogo-small.jpg \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/Media
+rm $RPM_BUILD_ROOT%{_libdir}/*.la
+rm $RPM_BUILD_ROOT%{_libdir}/OGRE/*.la
 
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-for exe in `find Samples/Common/bin -type f -perm +111 -print -maxdepth 1`
-do
-  install -p -m 755 $exe $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-done
+# The Sample binaries get installed into the buildroot in a subdir of
+# the cwd??
+mv $RPM_BUILD_ROOT`pwd`/Samples/Common/bin/* \
+  $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 for cfg in `find Samples/Common/bin -name \*.cfg -print -maxdepth 1`
 do
   install -p -m 644 $cfg $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
@@ -177,10 +154,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu May 24 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-2.fc7.1
+* Sat Jun 30 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.2-1
+- New upstream release 1.4.2
+- Warning as always with a new upstream ogre release this breaks the ABI
+  and changes the soname!
+- Warning this release also breaks the API!
+
+* Thu May 24 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-2
 - Fix building on ppc64
-- Give this version an extra .1 after the disttag, as an fc7 tag was
-  accidentely created in the F-8 tree
 
 * Fri Feb 16 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.2.5-1
 - New upstream release 1.2.5

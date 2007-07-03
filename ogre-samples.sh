@@ -3,7 +3,7 @@
 set -e
 
 # find out LIBDIR
-if [ -x /usr/lib64/OGRE/Samples/resources.cfg ]; then
+if [ -f /usr/lib64/OGRE/Samples/resources.cfg ]; then
   LIBDIR=/usr/lib64
 else
   LIBDIR=/usr/lib
@@ -26,6 +26,8 @@ for i in `(cd $LIBDIR/OGRE; ls *.so)`; do
     echo "Plugin=$i" >> plugins.cfg
   fi
 done
+
+set +e
 
 for i in `(cd $LIBDIR/OGRE/Samples/; find -type f -perm +111)`; do
   if [ $i != ./BSP ]; then
