@@ -1,8 +1,8 @@
 Name:           ogre
 Version:        1.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
-License:        LGPL
+License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 Source0:        http://downloads.sourceforge.net/ogre/ogre-linux-osx-v%(echo %{version} | tr . -).tar.bz2
@@ -154,6 +154,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 15 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.2-2
+- Update License tag for new Licensing Guidelines compliance
+
 * Sat Jun 30 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.2-1
 - New upstream release 1.4.2
 - Warning as always with a new upstream ogre release this breaks the ABI
