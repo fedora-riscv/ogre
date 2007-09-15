@@ -1,14 +1,13 @@
 Name:           ogre
-Version:        1.4.2
-Release:        2%{?dist}
+Version:        1.4.4
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-Source0:        http://downloads.sourceforge.net/ogre/ogre-linux-osx-v%(echo %{version} | tr . -).tar.bz2
+Source0:        http://downloads.sourceforge.net/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
-Patch1:         ogre-1.2.5-ppc64.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -60,14 +59,16 @@ with the wrapper script called "Ogre-Samples".
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
-%patch1 -p1 -z .ppc64
-# Don't try to build SSE optimised code on ppc64
-sed -i 's/\tpowerpc)$/\tpowerpc|powerpc64)/g' configure
+# building ogre while ogre-devel is installed results in binaries getting
+# linked against the installed version, instead of the just build one <sigh>
+if [ -f /usr/include/OGRE/Ogre.h ]; then
+  echo "Error building ogre while ogre-devel is installed does not work!"
+  exit 1
+fi
 # stop some CVS stuff from getting installed
-rm -r `find Docs Samples/Media -name CVS` 'Docs/manual/.#manual_16.html.1.47' \
-  Docs/manual/manual_16.html.rej
+rm -r `find Docs Samples/Media -name CVS`
 # fix line-endings of Docs
-sed -i 's/\r//g' Docs/manual/*.html
+sed -i 's/\r//g' Docs/ChangeLog.html Docs/manual/*.html
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -80,6 +81,17 @@ chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
   Samples/Media/gui/TaharezLook.looknfeel \
   Samples/Media/gui/Falagard.xsd \
   Samples/Media/materials/scripts/Example-DynTex.material
+# create a clean version of the api docs for %%doc
+mkdir api
+cp Docs/api/html/*.html Docs/api/html/*.gif Docs/api/html/*.png \
+  Docs/api/html/*.css api
+for i in api/OgreParticleEmitter_8h-source.html \
+         api/classOgre_1_1ParticleSystem.html \
+         api/classOgre_1_1DynLib.html \
+         api/classOgre_1_1ParticleEmitter.html; do
+  iconv -f ISO_8859-2 -t UTF8 $i > api/tmp
+  mv api/tmp $i
+done
 
 
 %build
@@ -144,7 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel-doc
 %defattr(-,root,root,-)
-%doc LINUX.DEV Docs/api Docs/manual Docs/vbo-update Docs/style.css
+%doc LINUX.DEV api Docs/manual Docs/vbo-update Docs/style.css
 
 %files samples
 %defattr(-,root,root)
@@ -154,6 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Sep 14 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.4-1
+- New upstream release 1.4.4 (bz 291481)
+
 * Wed Aug 15 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.2-2
 - Update License tag for new Licensing Guidelines compliance
 
