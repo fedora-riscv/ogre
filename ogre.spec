@@ -1,5 +1,5 @@
 Name:           ogre
-Version:        1.4.4
+Version:        1.4.5
 Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
@@ -166,6 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Oct  7 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-1
+- New upstream release 1.4.5
+
 * Fri Sep 14 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.4-1
 - New upstream release 1.4.4 (bz 291481)
 
