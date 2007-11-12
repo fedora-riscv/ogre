@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -116,9 +116,9 @@ mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 # the cwd??
 mv $RPM_BUILD_ROOT`pwd`/Samples/Common/bin/* \
   $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-for cfg in `find Samples/Common/bin -name \*.cfg -print -maxdepth 1`
-do
-  install -p -m 644 $cfg $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+for cfg in media.cfg quake3settings.cfg resources.cfg; do
+  install -p -m 644 Samples/Common/bin/$cfg \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 done
 install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
@@ -166,6 +166,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 12 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-2
+- Ogre-Samples now takes the name of which samples to run as arguments, if no
+  arguments are provided, it will run all of them like it used too (bz 377011)
+- Don't install a useless / broken plugins.cfg in the Samples folder,
+  Ogre-Samples will generate a correct one when run (bz 377011)
+
 * Mon Oct  8 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-1
 - New upstream release 1.4.5
 
