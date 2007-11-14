@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -59,12 +59,6 @@ with the wrapper script called "Ogre-Samples".
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
-# building ogre while ogre-devel is installed results in binaries getting
-# linked against the installed version, instead of the just build one <sigh>
-if [ -f /usr/include/OGRE/Ogre.h ]; then
-  echo "Error building ogre while ogre-devel is installed does not work!"
-  exit 1
-fi
 # stop some CVS stuff from getting installed
 rm -r `find Docs Samples/Media -name CVS`
 # fix line-endings of Docs
@@ -101,6 +95,9 @@ done
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+# Stop ogre from linking the GL render plugin against the system libOgre
+# instead of the just build one.
+sed -i 's|-L%{_libdir}||g' `find -name Makefile`
 make %{?_smp_mflags}
 
 
@@ -166,6 +163,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 14 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-3
+- Fix building of ogre with an older version of ogre-devel installed
+  (bz 382311)
+
 * Mon Nov 12 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-2
 - Ogre-Samples now takes the name of which samples to run as arguments, if no
   arguments are provided, it will run all of them like it used too (bz 377011)
