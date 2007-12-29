@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.4.5
-Release:        3%{?dist}
+Version:        1.4.6
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -163,6 +163,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 29 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-1
+- New upstream release 1.4.6
+- Warning as always with a new upstream ogre release this breaks the ABI
+  and changes the soname!
+
 * Wed Nov 14 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.5-3
 - Fix building of ogre with an older version of ogre-devel installed
   (bz 382311)
