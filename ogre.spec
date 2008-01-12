@@ -1,13 +1,16 @@
 Name:           ogre
 Version:        1.4.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-Source0:        http://downloads.sourceforge.net/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
+# This is http://downloads.sourceforge.net/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
+# With the non free licensed headers under RenderSystems/GL/include/GL removed
+Source0:        ogre-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
+Patch1:         ogre-1.4.6-system-glew.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -59,6 +62,7 @@ with the wrapper script called "Ogre-Samples".
 %prep
 %setup -q -n ogrenew
 %patch0 -p1 -z .rpath
+%patch1 -p1 -z .glew
 # stop some CVS stuff from getting installed
 rm -r `find Docs Samples/Media -name CVS`
 # fix line-endings of Docs
@@ -163,6 +167,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan 12 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-2
+- Oops I just found out that ogre contains private copies of GL and GLEW
+  headers, which fall under the not 100% SGI Free Software B and GLX Public
+  License licenses, remove these (even from the tarbal!) and use the system
+  versions instead
+
 * Sat Dec 29 2007 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-1
 - New upstream release 1.4.6
 - Warning as always with a new upstream ogre release this breaks the ABI
