@@ -14,7 +14,7 @@ Patch1:         ogre-1.4.6-system-glew.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
-BuildRequires:  ois-devel
+BuildRequires:  ois-devel glew-devel
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
