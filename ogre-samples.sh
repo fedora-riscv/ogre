@@ -29,8 +29,15 @@ done
 
 set +e
 
-for i in `(cd $LIBDIR/OGRE/Samples/; find -type f -perm +111)`; do
-  if [ $i != ./BSP ]; then
-    $LIBDIR/OGRE/Samples/$i
-  fi
-done
+if [ $# -ge 1 ]; then
+  while [ $# -ge 1 ]; do
+    $LIBDIR/OGRE/Samples/$1
+    shift
+  done
+else
+  for i in `(cd $LIBDIR/OGRE/Samples/; find -type f -perm +111)`; do
+    if [ $i != ./BSP ]; then
+      $LIBDIR/OGRE/Samples/$i
+    fi
+  done
+fi
