@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -167,6 +167,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan 22 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-3
+- Rebuild for new glew
+
 * Sat Jan 12 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-2
 - Oops I just found out that ogre contains private copies of GL and GLEW
   headers, which fall under the not 100% SGI Free Software B and GLX Public
