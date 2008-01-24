@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.6
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -111,6 +111,12 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/*.la
 rm $RPM_BUILD_ROOT%{_libdir}/OGRE/*.la
 
+# These 2 not really public header files are needed for ogre4j
+install -p -m 644 \
+  OgreMain/include/OgreOptimisedUtil.h \
+  OgreMain/include/OgrePlatformInformation.h \
+  $RPM_BUILD_ROOT%{_includedir}/OGRE
+
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 # The Sample binaries get installed into the buildroot in a subdir of
@@ -167,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 24 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-4
+- Install 2 additional header files for ogre4j (bz 429965)
+
 * Tue Jan 22 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-3
 - Rebuild for new glew
 
