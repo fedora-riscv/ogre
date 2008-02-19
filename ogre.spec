@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -173,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.4.6-5
+- Autorebuild for GCC 4.3
+
 * Thu Jan 24 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.6-4
 - Install 2 additional header files for ogre4j (bz 429965)
 
