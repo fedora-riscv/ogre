@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.4.6
-Release:        5%{?dist}
+Version:        1.4.7
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -173,6 +173,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Mar 16 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.7-1
+- New upstream release 1.4.7
+- Warning as always with a new upstream ogre release this breaks the ABI
+  and changes the soname!
+
 * Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 1.4.6-5
 - Autorebuild for GCC 4.3
 
