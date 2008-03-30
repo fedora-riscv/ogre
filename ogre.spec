@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.4.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -12,9 +12,9 @@ Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.4.6-system-glew.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  cegui-devel zziplib-devel DevIL-devel freetype-devel gtk2-devel
+BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
-BuildRequires:  ois-devel glew-devel
+BuildRequires:  ois-devel glew-devel freeimage-devel OpenEXR-devel
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -93,9 +93,7 @@ done
 
 
 %build
-# notice we disable freeimage (and thus use DevIL) because freeimage
-# is GPL not LGPL
-%configure --disable-cg --disable-freeimage
+%configure --disable-cg --disable-devil --enable-openexr
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -173,6 +171,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Mar 30 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.7-2
+- Switch to freeimage as imagelibrary, as upstream is abandoning DevIL support
+  (bz 435399)
+- Enable the openexr plugin
+
 * Sun Mar 16 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.7-1
 - New upstream release 1.4.7
 - Warning as always with a new upstream ogre release this breaks the ABI
