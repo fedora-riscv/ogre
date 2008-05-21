@@ -1,20 +1,22 @@
 Name:           ogre
-Version:        1.4.8
-Release:        1%{?dist}
+Version:        1.4.7
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-# This is http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
+# This is http://downloads.sourceforge.net/ogre/ogre-linux_osx-v%(echo %{version} | tr . -).tar.bz2
 # With the non free licensed headers under RenderSystems/GL/include/GL removed
 Source0:        ogre-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.4.6-system-glew.patch
+Patch2:         ogre-1.4.7-system-tinyxml.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel glew-devel freeimage-devel OpenEXR-devel
+BuildRequires:  tinyxml-devel
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -60,9 +62,14 @@ with the wrapper script called "Ogre-Samples".
 
 
 %prep
-%setup -q -n ogre
+%setup -q -n ogrenew
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
+%patch2 -p1
+# stop some CVS stuff from getting installed
+rm -r `find Docs Samples/Media -name CVS`
+# fix line-endings of Docs
+sed -i 's/\r//g' Docs/ChangeLog.html Docs/manual/*.html
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -84,9 +91,10 @@ for i in api/OgreParticleEmitter_8h-source.html \
          api/classOgre_1_1DynLib.html \
          api/classOgre_1_1ParticleEmitter.html; do
   iconv -f ISO_8859-2 -t UTF8 $i > api/tmp
-  touch -r $i api/tmp
   mv api/tmp $i
 done
+# remove included tinyxml headers to ensure use of system headers
+rm Tools/XMLConverter/include/tiny*
 
 
 %build
@@ -168,10 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue May 13 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.8-1
-- New upstream release 1.4.8
-- Warning as always with a new upstream ogre release this breaks the ABI
-  and changes the soname!
+* Wed May 21 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.7-3
+- Rebuild for new cegui
+- Use system tinyxml (bz 447698)
 
 * Sun Mar 30 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.7-2
 - Switch to freeimage as imagelibrary, as upstream is abandoning DevIL support
