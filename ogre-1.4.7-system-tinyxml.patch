@@ -121,3 +121,27 @@ diff -up ogre/Tools/XMLConverter/src/Makefile.in~ ogre/Tools/XMLConverter/src/Ma
  mostlyclean-libtool:
  	-rm -f *.lo
  
+diff -up ogre/Tools/XMLConverter/include/Makefile.am~ ogre/Tools/XMLConverter/include/Makefile.am
+--- ogre/Tools/XMLConverter/include/Makefile.am~	2008-05-22 12:02:52.000000000 +0200
++++ ogre/Tools/XMLConverter/include/Makefile.am	2008-05-22 12:02:52.000000000 +0200
+@@ -1,5 +1,3 @@
+ noinst_HEADERS = OgreXMLMeshSerializer.h \
+                  OgreXMLPrerequisites.h \
+-                 OgreXMLSkeletonSerializer.h \
+-                 tinystr.h \
+-                 tinyxml.h
++                 OgreXMLSkeletonSerializer.h
+diff -up ogre/Tools/XMLConverter/include/Makefile.in~ ogre/Tools/XMLConverter/include/Makefile.in
+--- ogre/Tools/XMLConverter/include/Makefile.in~	2008-05-22 12:03:01.000000000 +0200
++++ ogre/Tools/XMLConverter/include/Makefile.in	2008-05-22 12:03:01.000000000 +0200
+@@ -223,9 +223,7 @@ target_os = @target_os@
+ target_vendor = @target_vendor@
+ noinst_HEADERS = OgreXMLMeshSerializer.h \
+                  OgreXMLPrerequisites.h \
+-                 OgreXMLSkeletonSerializer.h \
+-                 tinystr.h \
+-                 tinyxml.h
++                 OgreXMLSkeletonSerializer.h
+ 
+ all: all-am
+ 
