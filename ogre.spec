@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.4.8
-Release:        2%{?dist}
+Version:        1.4.9
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
@@ -173,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul  2 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.9-1
+- New upstream release 1.4.9
+
 * Thu May 22 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.8-2
 - Rebuild for new cegui
 - Use system tinyxml (bz 447698)
