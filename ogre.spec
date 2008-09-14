@@ -1,17 +1,18 @@
 Name:           ogre
-Version:        1.4.9
-Release:        2%{?dist}
+Version:        1.6.0
+Release:        0.1.rc1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 License:        LGPLv2+
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # With the non free licensed headers under RenderSystems/GL/include/GL removed
-Source0:        ogre-%{version}-clean.tar.bz2
+Source0:        ogre-1.6.0rc1-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
-Patch1:         ogre-1.4.6-system-glew.patch
+Patch1:         ogre-1.6.0-system-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
+Patch3:         ogre-1.6.0rc1-openexr-fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -66,6 +67,7 @@ with the wrapper script called "Ogre-Samples".
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
+%patch3 -p1
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -147,6 +149,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS BUGS COPYING 
 %doc Docs/ChangeLog.html Docs/ReadMe.html Docs/style.css Docs/ogre-logo.gif
 %{_bindir}/Ogre*
+%{_bindir}/rcapsdump
 %{_libdir}/lib*Ogre*-%{version}.so
 %{_libdir}/OGRE
 %{_datadir}/OGRE
@@ -173,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Sep 13 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1rc1
+- New upstream release 1.6.0rc1
+
 * Fri Jul 11 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.9-2
 - Rebuild for new cegui
 
