@@ -80,8 +80,9 @@ chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
   Samples/Media/materials/scripts/Example-DynTex.material
 # create a clean version of the api docs for %%doc
 mkdir api
-cp Docs/api/html/*.html Docs/api/html/*.gif Docs/api/html/*.png \
-  Docs/api/html/*.css api
+find . \( -wholename './Docs/api/html/*.html' -or \
+  -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
+  -or -wholename './Docs/api/html/*.css' \) -exec cp --target-directory='api' '{}' +
 for i in api/OgreParticleEmitter_8h-source.html \
          api/classOgre_1_1ParticleSystem.html \
          api/classOgre_1_1DynLib.html \
