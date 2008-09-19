@@ -12,11 +12,10 @@ Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.6.0-system-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
-Patch3:         ogre-1.6.0rc1-openexr-fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
-BuildRequires:  ois-devel glew-devel freeimage-devel OpenEXR-devel
+BuildRequires:  ois-devel glew-devel freeimage-devel
 BuildRequires:  tinyxml-devel
 
 %description
@@ -67,7 +66,6 @@ with the wrapper script called "Ogre-Samples".
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
-%patch3 -p1
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -97,7 +95,7 @@ rm Tools/XMLConverter/include/tiny*
 
 
 %build
-%configure --disable-cg --disable-devil --enable-openexr
+%configure --disable-cg --disable-devil
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -176,8 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Sep 13 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1rc1
+* Sat Sep 13 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1.rc1
 - New upstream release 1.6.0rc1
+- Removing broken OpenEXR plugin
 
 * Fri Jul 11 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.9-2
 - Rebuild for new cegui
