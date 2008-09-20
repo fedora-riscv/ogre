@@ -10,12 +10,13 @@ URL:            http://www.ogre3d.org/
 Source0:        ogre-1.6.0rc1-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
-Patch1:         ogre-1.6.0-system-glew.patch
+#Patch1:         ogre-1.6.0-system-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
-BuildRequires:  ois-devel glew-devel freeimage-devel
+BuildRequires:  ois-devel freeimage-devel
+#BuildRequires:  glew-devel
 BuildRequires:  tinyxml-devel
 
 %description
@@ -64,7 +65,7 @@ with the wrapper script called "Ogre-Samples".
 %prep
 %setup -q -n ogre
 %patch0 -p1 -z .rpath
-%patch1 -p1 -z .glew
+#%patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -177,7 +178,8 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sat Sep 13 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1.rc1
 - New upstream release 1.6.0rc1
-- Removing broken OpenEXR plugin
+- Removing broken OpenEXR plugin, it is not updated for long time and doesn't
+  compile. FreeImage now have EXR support
 
 * Fri Jul 11 2008 Hans de Goede <j.w.r.degoede@hhs.nl> 1.4.9-2
 - Rebuild for new cegui
