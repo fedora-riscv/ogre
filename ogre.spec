@@ -143,6 +143,11 @@ sed -i 's|^PluginFolder=.*$|PluginFolder=%{_libdir}/OGRE|' \
 # Change location of pak + switch from non-free chiropteraDM map
 sed -i 's|^Pak0Location: ../../Media/.*$|Pak0Location: %{_datadir}/OGRE/Samples/Media/packs/ogretestmap.zip|' \
     $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+sed -i 's|^Map:.*$|Map: ogretestmap.bsp|' \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+# Fixing bug with wrong case for media
+mv Samples/Media/PCZAppMedia/ROOM_NY.mesh Samples/Media/PCZAppMedia/room_ny.mesh
+mv Samples/Media/PCZAppMedia/ROOM_PY.mesh Samples/Media/PCZAppMedia/room_py.mesh
 install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
@@ -185,6 +190,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files samples
 %defattr(-,root,root)
+%doc Samples/ReadMe.html
 %{_bindir}/Ogre-Samples
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/Samples

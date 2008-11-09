@@ -59,7 +59,7 @@ elif [ $# -ge 1 ]; then
     shift
   done
 else
-  echo "Usage: " `basename $0` " (samples | -a)"
+  echo "Usage:" `basename $0` "(samples | -a)"
   echo
   echo "samples - Runs specified samples from list"
   echo "-a      - Runs all samples"
