@@ -1,14 +1,16 @@
 Name:           ogre
 Version:        1.6.0
-Release:        0.1.rc1%{?dist}
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
-License:        LGPLv2+
+# CC-BY-SA is for devel docs
+License:        LGPLv2+ and CC-BY-SA
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # With the non free licensed headers under RenderSystems/GL/include/GL removed
 # And GLEW sources updated to 1.5.0 - upstream notified http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
-Source0:        ogre-1.6.0rc1-clean.tar.bz2
+# And non-free chiropteraDM.pk3 under Samples/Media/packs removed
+Source0:        %{name}-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
@@ -122,16 +124,30 @@ install -p -m 644 \
   OgreMain/include/OgrePlatformInformation.h \
   $RPM_BUILD_ROOT%{_includedir}/OGRE
 
+# Create config for ldconfig
+mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d
+echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
+
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 # The Sample binaries get installed into the buildroot in a subdir of
 # the cwd??
 mv $RPM_BUILD_ROOT`pwd`/Samples/Common/bin/* \
   $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-for cfg in media.cfg quake3settings.cfg resources.cfg; do
+for cfg in plugins.cfg media.cfg quake3settings.cfg resources.cfg; do
   install -p -m 644 Samples/Common/bin/$cfg \
     $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 done
+sed -i 's|^PluginFolder=.*$|PluginFolder=%{_libdir}/OGRE|' \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/plugins.cfg
+# Change location of pak + switch from non-free chiropteraDM map
+sed -i 's|^Pak0Location: ../../Media/.*$|Pak0Location: %{_datadir}/OGRE/Samples/Media/packs/ogretestmap.zip|' \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+sed -i 's|^Map:.*$|Map: ogretestmap.bsp|' \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+# Fixing bug with wrong case for media
+mv Samples/Media/PCZAppMedia/ROOM_NY.mesh Samples/Media/PCZAppMedia/room_ny.mesh
+mv Samples/Media/PCZAppMedia/ROOM_PY.mesh Samples/Media/PCZAppMedia/room_py.mesh
 install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
@@ -149,7 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS BUGS COPYING 
+%doc AUTHORS BUGS COPYING
 %doc Docs/ChangeLog.html Docs/ReadMe.html Docs/style.css Docs/ogre-logo.gif
 %{_bindir}/Ogre*
 %{_bindir}/rcapsdump
@@ -159,6 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_bindir}/Ogre-Samples
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
+/etc/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -173,12 +190,19 @@ rm -rf $RPM_BUILD_ROOT
 
 %files samples
 %defattr(-,root,root)
+%doc Samples/ReadMe.html
 %{_bindir}/Ogre-Samples
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/Samples
 
 
 %changelog
+* Thu Nov 06 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-1
+- New upstream release 1.6.0
+- Updated samples running script
+- Removed non-free quake map from samples media
+- Added docs license in License tag
+
 * Sat Sep 21 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1.rc1
 - New upstream release 1.6.0rc1
 - Disabling broken OpenEXR plugin, it is not updated for long time and doesn't
