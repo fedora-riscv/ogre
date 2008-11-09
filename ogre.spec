@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -197,6 +197,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Nov 09 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-2
+- Bump release to fix tagging
+
 * Thu Nov 06 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-1
 - New upstream release 1.6.0
 - Updated samples running script
