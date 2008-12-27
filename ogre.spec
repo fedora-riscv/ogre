@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -10,7 +10,8 @@ URL:            http://www.ogre3d.org/
 # With the non free licensed headers under RenderSystems/GL/include/GL removed
 # And GLEW sources updated to 1.5.0 - upstream notified http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
 # And non-free chiropteraDM.pk3 under Samples/Media/packs removed
-Source0:        %{name}-%{version}-clean.tar.bz2
+# And non-free fonts under Samples/Media/fonts removed
+Source0:        %{name}-%{version}-clean-v2.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
@@ -58,7 +59,7 @@ manual. Install this package if you want to develop programs that use Ogre.
 %package samples
 Summary:        Ogre samples executables and media
 Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name} = %{version}-%{release}, dejavu-fonts-lgc-sans
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
@@ -152,6 +153,14 @@ install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
 cp -a Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
+ln -s ../../../../fonts/dejavu/DejaVuLGCSans-Bold.ttf \
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluebold.ttf
+ln -s ../../../../fonts/dejavu/DejaVuLGCSans.ttf \
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluehigh.ttf
+ln -s ../../../../fonts/dejavu/DejaVuLGCSansCondensed.ttf \
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluecond.ttf
+ln -s ../../../../fonts/dejavu/DejaVuLGCSans.ttf \
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/solo5.ttf       
 
 
 %clean
@@ -197,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 27 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-3
+- Remove non-free fonts from samples subpackage (rh 477434)
+
 * Wed Dec  3 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-2
 - Rebuild for new cegui
 
