@@ -206,7 +206,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Jan 10 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-4
+* Sat Jan 10 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-4
 - use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
 
 * Sat Dec 27 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-3
