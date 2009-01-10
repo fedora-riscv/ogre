@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -59,7 +59,7 @@ manual. Install this package if you want to develop programs that use Ogre.
 %package samples
 Summary:        Ogre samples executables and media
 Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}, dejavu-fonts-lgc-sans
+Requires:       %{name} = %{version}-%{release}, dejavu-fonts-sans
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
@@ -153,13 +153,13 @@ install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
 cp -a Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
-ln -s ../../../../fonts/dejavu/DejaVuLGCSans-Bold.ttf \
+ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluebold.ttf
-ln -s ../../../../fonts/dejavu/DejaVuLGCSans.ttf \
+ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluehigh.ttf
-ln -s ../../../../fonts/dejavu/DejaVuLGCSansCondensed.ttf \
+ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluecond.ttf
-ln -s ../../../../fonts/dejavu/DejaVuLGCSans.ttf \
+ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/solo5.ttf       
 
 
@@ -206,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan 10 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-4
+- use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
+
 * Sat Dec 27 2008 Hans de Goede <hdegoede@redhat.com> 1.6.0-3
 - Remove non-free fonts from samples subpackage (rh 477434)
 
