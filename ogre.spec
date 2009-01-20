@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -59,7 +59,7 @@ manual. Install this package if you want to develop programs that use Ogre.
 %package samples
 Summary:        Ogre samples executables and media
 Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}, dejavu-fonts-sans
+Requires:       %{name} = %{version}-%{release}, dejavu-sans-fonts
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
@@ -206,6 +206,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan 20 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-5
+- Adjust font requires for font rename (rh 480465)
+use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
+
 * Sat Jan 10 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-4
 - use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
 
