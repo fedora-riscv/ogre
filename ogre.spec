@@ -208,7 +208,6 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue Jan 20 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-5
 - Adjust font requires for font rename (rh 480465)
-use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
 
 * Sat Jan 10 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-4
 - use regular (full) instead of lgc dejavu fonts for the demos (rh 477434)
