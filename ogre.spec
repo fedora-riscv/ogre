@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.6.0
-Release:        5%{?dist}
+Version:        1.6.1
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -8,10 +8,10 @@ Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # With the non free licensed headers under RenderSystems/GL/include/GL removed
-# And GLEW sources updated to 1.5.0 - upstream notified http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
+# And GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 2.5.0 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
 # And non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # And non-free fonts under Samples/Media/fonts removed
-Source0:        %{name}-%{version}-clean-v2.tar.bz2
+Source0:        %{name}-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
@@ -206,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Feb 10 2009 Alexey Torkhov <atorkhov@gmail.com> 1.6.1-1
+- New upstream release 1.6.1
+
 * Tue Jan 20 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-5
 - Adjust font requires for font rename (rh 480465)
 
