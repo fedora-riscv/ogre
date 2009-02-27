@@ -74,6 +74,7 @@ with the wrapper script called "Ogre-Samples".
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
+%patch3 -p1
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
