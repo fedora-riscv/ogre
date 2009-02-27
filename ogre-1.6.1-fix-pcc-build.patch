@@ -1,0 +1,19 @@
+diff -ur ogre/OgreMain/src/nedmalloc/malloc.c.h ogre.new/OgreMain/src/nedmalloc/malloc.c.h
+--- ogre/OgreMain/src/nedmalloc/malloc.c.h	2009-02-27 11:07:51.000000000 +0300
++++ ogre.new/OgreMain/src/nedmalloc/malloc.c.h	2009-02-27 11:08:02.000000000 +0300
+@@ -1837,6 +1837,7 @@
+ 
+ /* Cope with old-style linux recursive lock initialization by adding */
+ /* skipped internal declaration from pthread.h */
++/*
+ #ifdef linux
+ #ifndef PTHREAD_MUTEX_RECURSIVE
+ extern int pthread_mutexattr_setkind_np __P ((pthread_mutexattr_t *__attr,
+@@ -1845,6 +1846,7 @@
+ #define pthread_mutexattr_settype(x,y) pthread_mutexattr_setkind_np(x,y)
+ #endif
+ #endif
++*/
+ 
+ static int pthread_init_lock (MLOCK_T *sl) {
+   pthread_mutexattr_t attr;

@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -18,6 +18,7 @@ Patch0:         ogre-1.2.1-rpath.patch
 # Upstream patch to GLEW applied to new version
 Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
+Patch3:         ogre-1.6.1-fix-ppc-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -206,6 +207,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Feb 27 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-3
+- Fixing PPC build
+
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
