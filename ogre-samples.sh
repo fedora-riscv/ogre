@@ -1,5 +1,14 @@
 #!/bin/sh
 
+checkCg()
+{
+  if [ ! -f $LIBDIR/OGRE/Plugin_CgProgramManager.so ]; then
+    sed -i 's|^\(Plugin=Plugin_CgProgramManager.so\)|#\1|' plugins.cfg
+  else
+    sed -i 's|^#\(Plugin=Plugin_CgProgramManager.so\)|\1|' plugins.cfg
+  fi
+}
+
 selectPCZ()
 {
   sed -i 's|^\(Plugin=Plugin_OctreeSceneManager.so\)|#\1|' plugins.cfg
@@ -47,11 +56,13 @@ for i in plugins.cfg media.cfg quake3settings.cfg resources.cfg; do
   cp -f $LIBDIR/OGRE/Samples/$i .
 done
 
+checkCg
+
 set +e
 
 if [ "$1" = "-a" ]; then
   for i in `(cd $LIBDIR/OGRE/Samples/; find -type f -perm +111 | sort)`; do
-    runSample `echo $i | sed 's|./||'`
+    runSample `echo $i | sed 's#./##'`
   done
 elif [ $# -ge 1 ]; then
   while [ $# -ge 1 ]; do
@@ -66,7 +77,7 @@ else
   echo
   echo -n "Available samples:"
   for i in `(cd $LIBDIR/OGRE/Samples/; find -type f -perm +111 | sort)`; do
-    echo -n " $i" | sed 's|./||'
+    echo -n " $i" | sed 's#./##'
   done
   echo
 fi

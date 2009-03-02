@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA is for devel docs
 License:        LGPLv2+ and CC-BY-SA
@@ -20,7 +20,7 @@ Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  cegui-devel zziplib-devel freetype-devel gtk2-devel
+BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel
 #BuildRequires:  openexr-devel glew-devel
@@ -208,6 +208,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 02 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-4
+- Update Ogre-Samples to work properly without CgProgramManager plugin
+
 * Fri Feb 27 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-3
 - Fixing PPC build
 
