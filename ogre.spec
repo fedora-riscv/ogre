@@ -1,16 +1,20 @@
 Name:           ogre
 Version:        1.6.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
-# CC-BY-SA is for devel docs
-License:        LGPLv2+ and CC-BY-SA
+# LGPLv2+  - main library
+# CC-BY-SA - devel docs
+# Freely redistributable without restriction - most of samples content
+# MIT      - shaders for DeferredShadingMedia samples
+License:        LGPLv2+ and CC-BY-SA and Freely redistributable without restriction and MIT
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
-# This is http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
-# With the non free licensed headers under RenderSystems/GL/include/GL removed
-# And GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 2.5.0 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
-# And non-free chiropteraDM.pk3 under Samples/Media/packs removed
-# And non-free fonts under Samples/Media/fonts removed
+# This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
+# with non-free files striped:
+# - Non-free licensed headers under RenderSystems/GL/include/GL removed
+# - GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 2.5.0 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
+# - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
+# - Non-free fonts under Samples/Media/fonts removed
 Source0:        %{name}-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
 Patch0:         ogre-1.2.1-rpath.patch
@@ -88,6 +92,7 @@ chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
   Samples/Media/gui/Falagard.xsd \
   Samples/Media/materials/scripts/Example-DynTex.material
 # create a clean version of the api docs for %%doc
+rm -rf ./Docs/
 mkdir api
 find . \( -wholename './Docs/api/html/*.html' -or \
   -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
@@ -208,6 +213,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Mar 06 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-5
+- Add licenses of samples to License tag
+
 * Mon Mar 02 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-4
 - Update Ogre-Samples to work properly without CgProgramManager plugin
 
