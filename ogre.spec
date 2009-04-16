@@ -1,18 +1,18 @@
 Name:           ogre
-Version:        1.6.1
-Release:        5%{?dist}
+Version:        1.6.2
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
-# LGPLv2+  - main library
+# LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
 # Freely redistributable without restriction - most of samples content
 # MIT      - shaders for DeferredShadingMedia samples
-License:        LGPLv2+ and CC-BY-SA and Freely redistributable without restriction and MIT
+License:        LGPLv2+ with exceptions and CC-BY-SA and Freely redistributable without restriction and MIT
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped:
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
-# - GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 2.5.0 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
+# - GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 1.5.1 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # - Non-free fonts under Samples/Media/fonts removed
 Source0:        %{name}-%{version}-clean.tar.bz2
@@ -26,8 +26,8 @@ Patch3:         ogre-1.6.1-fix-ppc-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
-BuildRequires:  ois-devel freeimage-devel
-#BuildRequires:  openexr-devel glew-devel
+BuildRequires:  ois-devel freeimage-devel openexr-devel
+#BuildRequires:  glew-devel
 BuildRequires:  tinyxml-devel
 
 %description
@@ -78,7 +78,7 @@ with the wrapper script called "Ogre-Samples".
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
-%patch3 -p1
+%patch3 -p1 -z .ppc
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -92,7 +92,6 @@ chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
   Samples/Media/gui/Falagard.xsd \
   Samples/Media/materials/scripts/Example-DynTex.material
 # create a clean version of the api docs for %%doc
-rm -rf ./Docs/
 mkdir api
 find . \( -wholename './Docs/api/html/*.html' -or \
   -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
@@ -105,12 +104,15 @@ for i in api/OgreParticleEmitter_8h-source.html \
   touch -r $i api/tmp
   mv api/tmp $i
 done
+# Add lgpl.txt symlink for links in License.html
+rm -r Docs/licenses/*
+ln -s COPYING Docs/licenses/lgpl.txt
 # remove included tinyxml headers to ensure use of system headers
 rm Tools/XMLConverter/include/tiny*
 
 
 %build
-%configure --disable-cg --disable-devil
+%configure --disable-cg --disable-devil --enable-openexr
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -182,7 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING
-%doc Docs/ChangeLog.html Docs/ReadMe.html Docs/style.css Docs/ogre-logo.gif
+%doc Docs/ChangeLog.html Docs/License.html Docs/licenses Docs/ReadMe.html Docs/style.css Docs/ogre-logo*.gif
 %{_bindir}/Ogre*
 %{_bindir}/rcapsdump
 %{_libdir}/lib*Ogre*-%{version}.so
@@ -202,7 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel-doc
 %defattr(-,root,root,-)
-%doc LINUX.DEV api Docs/manual Docs/vbo-update Docs/style.css
+%doc LINUX.DEV api Docs/manual Docs/shadows Docs/vbo-update Docs/style.css
 
 %files samples
 %defattr(-,root,root)
@@ -213,6 +215,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Apr 16 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.2-1
+- New upstream release 1.6.2
+- Exceptions added to License
+- Reenabling OpenEXR plugin, as it fixed now
+
 * Fri Mar 06 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-5
 - Add licenses of samples to License tag
 
