@@ -92,7 +92,6 @@ chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
   Samples/Media/gui/Falagard.xsd \
   Samples/Media/materials/scripts/Example-DynTex.material
 # create a clean version of the api docs for %%doc
-rm -rf ./Docs/
 mkdir api
 find . \( -wholename './Docs/api/html/*.html' -or \
   -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
