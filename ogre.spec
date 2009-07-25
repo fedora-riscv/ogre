@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -215,6 +215,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Thu Apr 16 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.2-1
 - New upstream release 1.6.2
 - Exceptions added to License
