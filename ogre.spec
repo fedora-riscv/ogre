@@ -29,8 +29,6 @@ BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
 #BuildRequires:  glew-devel
 BuildRequires:  tinyxml-devel
-# For drawing config dialog
-Requires:       xorg-x11-fonts-misc
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
