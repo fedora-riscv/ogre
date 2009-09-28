@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.6.2
-Release:        2%{?dist}
+Version:        1.6.4
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -10,7 +10,7 @@ License:        LGPLv2+ with exceptions and CC-BY-SA and Freely redistributable 
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
-# with non-free files striped:
+# with non-free files striped (see ogre-make-clean.sh):
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 # - GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 1.5.1 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
@@ -21,7 +21,7 @@ Patch0:         ogre-1.2.1-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
 # Upstream patch to GLEW applied to new version
 Patch1:         ogre-1.6.0rc1-glew.patch
-Patch2:         ogre-1.4.7-system-tinyxml.patch
+Patch2:         ogre-1.6.4-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
@@ -29,6 +29,8 @@ BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
 #BuildRequires:  glew-devel
 BuildRequires:  tinyxml-devel
+# For drawing config dialog
+Requires:       xorg-x11-fonts-misc
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -215,6 +217,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Sep 28 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.4-1
+- New upstream release 1.6.4
+
 * Sat Jul 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
