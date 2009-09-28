@@ -1,6 +1,31 @@
-diff -up ogre/Tools/XMLConverter/src/Makefile.am~ ogre/Tools/XMLConverter/src/Makefile.am
---- ogre/Tools/XMLConverter/src/Makefile.am~	2008-05-21 23:14:34.000000000 +0200
-+++ ogre/Tools/XMLConverter/src/Makefile.am	2008-05-21 23:14:34.000000000 +0200
+diff -urp ogre.old/Tools/XMLConverter/include/Makefile.am ogre/Tools/XMLConverter/include/Makefile.am
+--- ogre.old/Tools/XMLConverter/include/Makefile.am	2008-06-12 18:10:57.000000000 +0400
++++ ogre/Tools/XMLConverter/include/Makefile.am	2009-09-28 12:04:10.000000000 +0400
+@@ -1,5 +1,3 @@
+ noinst_HEADERS = OgreXMLMeshSerializer.h \
+                  OgreXMLPrerequisites.h \
+-                 OgreXMLSkeletonSerializer.h \
+-                 tinystr.h \
+-                 tinyxml.h
++                 OgreXMLSkeletonSerializer.h
+diff -urp ogre.old/Tools/XMLConverter/include/Makefile.in ogre/Tools/XMLConverter/include/Makefile.in
+--- ogre.old/Tools/XMLConverter/include/Makefile.in	2009-09-28 01:01:55.000000000 +0400
++++ ogre/Tools/XMLConverter/include/Makefile.in	2009-09-28 12:05:10.000000000 +0400
+@@ -207,9 +207,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ noinst_HEADERS = OgreXMLMeshSerializer.h \
+                  OgreXMLPrerequisites.h \
+-                 OgreXMLSkeletonSerializer.h \
+-                 tinystr.h \
+-                 tinyxml.h
++                 OgreXMLSkeletonSerializer.h
+ 
+ all: all-am
+ 
+Только в ogre/Tools/XMLConverter/include: Makefile.in.orig
+diff -urp ogre.old/Tools/XMLConverter/src/Makefile.am ogre/Tools/XMLConverter/src/Makefile.am
+--- ogre.old/Tools/XMLConverter/src/Makefile.am	2008-08-08 12:58:28.000000000 +0400
++++ ogre/Tools/XMLConverter/src/Makefile.am	2009-09-28 12:04:10.000000000 +0400
 @@ -3,10 +3,6 @@ bin_PROGRAMS=OgreXMLConverter
  OgreXMLConverter_CXXFLAGS=-DTIXML_USE_STL
  OgreXMLConverter_SOURCES= OgreXMLMeshSerializer.cpp \
@@ -14,10 +39,10 @@ diff -up ogre/Tools/XMLConverter/src/Makefile.am~ ogre/Tools/XMLConverter/src/Ma
  OgreXMLConverter_LDFLAGS= -L$(top_builddir)/OgreMain/src
 -OgreXMLConverter_LDADD= -lOgreMain
 +OgreXMLConverter_LDADD= -lOgreMain -ltinyxml
-diff -up ogre/Tools/XMLConverter/src/Makefile.in~ ogre/Tools/XMLConverter/src/Makefile.in
---- ogre/Tools/XMLConverter/src/Makefile.in~	2008-05-21 23:15:26.000000000 +0200
-+++ ogre/Tools/XMLConverter/src/Makefile.in	2008-05-21 23:15:26.000000000 +0200
-@@ -56,11 +56,7 @@ PROGRAMS = $(bin_PROGRAMS)
+diff -urp ogre.old/Tools/XMLConverter/src/Makefile.in ogre/Tools/XMLConverter/src/Makefile.in
+--- ogre.old/Tools/XMLConverter/src/Makefile.in	2009-09-28 01:01:55.000000000 +0400
++++ ogre/Tools/XMLConverter/src/Makefile.in	2009-09-28 12:05:10.000000000 +0400
+@@ -50,11 +50,7 @@ PROGRAMS = $(bin_PROGRAMS)
  am_OgreXMLConverter_OBJECTS =  \
  	OgreXMLConverter-OgreXMLMeshSerializer.$(OBJEXT) \
  	OgreXMLConverter-OgreXMLSkeletonSerializer.$(OBJEXT) \
@@ -29,8 +54,8 @@ diff -up ogre/Tools/XMLConverter/src/Makefile.in~ ogre/Tools/XMLConverter/src/Ma
 +	OgreXMLConverter-main.$(OBJEXT)
  OgreXMLConverter_OBJECTS = $(am_OgreXMLConverter_OBJECTS)
  OgreXMLConverter_DEPENDENCIES =
- DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/OgreMain/include
-@@ -250,14 +246,10 @@ INCLUDES = -I$(top_srcdir)/OgreMain/incl
+ OgreXMLConverter_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+@@ -237,14 +233,10 @@ INCLUDES = $(STLPORT_CFLAGS) -I$(top_src
  OgreXMLConverter_CXXFLAGS = -DTIXML_USE_STL
  OgreXMLConverter_SOURCES = OgreXMLMeshSerializer.cpp \
                        OgreXMLSkeletonSerializer.cpp \
@@ -47,7 +72,7 @@ diff -up ogre/Tools/XMLConverter/src/Makefile.in~ ogre/Tools/XMLConverter/src/Ma
  all: all-am
  
  .SUFFIXES:
-@@ -332,10 +324,6 @@ distclean-compile:
+@@ -319,10 +311,6 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreXMLConverter-OgreXMLMeshSerializer.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreXMLConverter-OgreXMLSkeletonSerializer.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreXMLConverter-main.Po@am__quote@
@@ -57,91 +82,67 @@ diff -up ogre/Tools/XMLConverter/src/Makefile.in~ ogre/Tools/XMLConverter/src/Ma
 -@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Po@am__quote@
  
  .cpp.o:
- @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@@ -400,62 +388,6 @@ OgreXMLConverter-main.obj: main.cpp
+ @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -387,62 +375,6 @@ OgreXMLConverter-main.obj: main.cpp
  @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
  
 -OgreXMLConverter-tinystr.o: tinystr.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinystr.o -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo" -c -o OgreXMLConverter-tinystr.o `test -f 'tinystr.cpp' || echo '$(srcdir)/'`tinystr.cpp; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo" "$(DEPDIR)/OgreXMLConverter-tinystr.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinystr.o -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinystr.Tpo -c -o OgreXMLConverter-tinystr.o `test -f 'tinystr.cpp' || echo '$(srcdir)/'`tinystr.cpp
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinystr.Tpo $(DEPDIR)/OgreXMLConverter-tinystr.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinystr.cpp' object='OgreXMLConverter-tinystr.o' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinystr.o `test -f 'tinystr.cpp' || echo '$(srcdir)/'`tinystr.cpp
 -
 -OgreXMLConverter-tinystr.obj: tinystr.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinystr.obj -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo" -c -o OgreXMLConverter-tinystr.obj `if test -f 'tinystr.cpp'; then $(CYGPATH_W) 'tinystr.cpp'; else $(CYGPATH_W) '$(srcdir)/tinystr.cpp'; fi`; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo" "$(DEPDIR)/OgreXMLConverter-tinystr.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinystr.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinystr.obj -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinystr.Tpo -c -o OgreXMLConverter-tinystr.obj `if test -f 'tinystr.cpp'; then $(CYGPATH_W) 'tinystr.cpp'; else $(CYGPATH_W) '$(srcdir)/tinystr.cpp'; fi`
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinystr.Tpo $(DEPDIR)/OgreXMLConverter-tinystr.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinystr.cpp' object='OgreXMLConverter-tinystr.obj' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinystr.obj `if test -f 'tinystr.cpp'; then $(CYGPATH_W) 'tinystr.cpp'; else $(CYGPATH_W) '$(srcdir)/tinystr.cpp'; fi`
 -
 -OgreXMLConverter-tinyxml.o: tinyxml.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxml.o -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo" -c -o OgreXMLConverter-tinyxml.o `test -f 'tinyxml.cpp' || echo '$(srcdir)/'`tinyxml.cpp; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxml.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxml.o -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxml.Tpo -c -o OgreXMLConverter-tinyxml.o `test -f 'tinyxml.cpp' || echo '$(srcdir)/'`tinyxml.cpp
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxml.Tpo $(DEPDIR)/OgreXMLConverter-tinyxml.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxml.cpp' object='OgreXMLConverter-tinyxml.o' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxml.o `test -f 'tinyxml.cpp' || echo '$(srcdir)/'`tinyxml.cpp
 -
 -OgreXMLConverter-tinyxml.obj: tinyxml.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxml.obj -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo" -c -o OgreXMLConverter-tinyxml.obj `if test -f 'tinyxml.cpp'; then $(CYGPATH_W) 'tinyxml.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxml.cpp'; fi`; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxml.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxml.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxml.obj -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxml.Tpo -c -o OgreXMLConverter-tinyxml.obj `if test -f 'tinyxml.cpp'; then $(CYGPATH_W) 'tinyxml.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxml.cpp'; fi`
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxml.Tpo $(DEPDIR)/OgreXMLConverter-tinyxml.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxml.cpp' object='OgreXMLConverter-tinyxml.obj' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxml.obj `if test -f 'tinyxml.cpp'; then $(CYGPATH_W) 'tinyxml.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxml.cpp'; fi`
 -
 -OgreXMLConverter-tinyxmlerror.o: tinyxmlerror.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlerror.o -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo" -c -o OgreXMLConverter-tinyxmlerror.o `test -f 'tinyxmlerror.cpp' || echo '$(srcdir)/'`tinyxmlerror.cpp; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlerror.o -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo -c -o OgreXMLConverter-tinyxmlerror.o `test -f 'tinyxmlerror.cpp' || echo '$(srcdir)/'`tinyxmlerror.cpp
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxmlerror.cpp' object='OgreXMLConverter-tinyxmlerror.o' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxmlerror.o `test -f 'tinyxmlerror.cpp' || echo '$(srcdir)/'`tinyxmlerror.cpp
 -
 -OgreXMLConverter-tinyxmlerror.obj: tinyxmlerror.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlerror.obj -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo" -c -o OgreXMLConverter-tinyxmlerror.obj `if test -f 'tinyxmlerror.cpp'; then $(CYGPATH_W) 'tinyxmlerror.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlerror.cpp'; fi`; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlerror.obj -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo -c -o OgreXMLConverter-tinyxmlerror.obj `if test -f 'tinyxmlerror.cpp'; then $(CYGPATH_W) 'tinyxmlerror.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlerror.cpp'; fi`
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Tpo $(DEPDIR)/OgreXMLConverter-tinyxmlerror.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxmlerror.cpp' object='OgreXMLConverter-tinyxmlerror.obj' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxmlerror.obj `if test -f 'tinyxmlerror.cpp'; then $(CYGPATH_W) 'tinyxmlerror.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlerror.cpp'; fi`
 -
 -OgreXMLConverter-tinyxmlparser.o: tinyxmlparser.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlparser.o -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo" -c -o OgreXMLConverter-tinyxmlparser.o `test -f 'tinyxmlparser.cpp' || echo '$(srcdir)/'`tinyxmlparser.cpp; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlparser.o -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo -c -o OgreXMLConverter-tinyxmlparser.o `test -f 'tinyxmlparser.cpp' || echo '$(srcdir)/'`tinyxmlparser.cpp
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxmlparser.cpp' object='OgreXMLConverter-tinyxmlparser.o' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxmlparser.o `test -f 'tinyxmlparser.cpp' || echo '$(srcdir)/'`tinyxmlparser.cpp
 -
 -OgreXMLConverter-tinyxmlparser.obj: tinyxmlparser.cpp
--@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlparser.obj -MD -MP -MF "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo" -c -o OgreXMLConverter-tinyxmlparser.obj `if test -f 'tinyxmlparser.cpp'; then $(CYGPATH_W) 'tinyxmlparser.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlparser.cpp'; fi`; \
--@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo" "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Po"; else rm -f "$(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo"; exit 1; fi
+-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -MT OgreXMLConverter-tinyxmlparser.obj -MD -MP -MF $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo -c -o OgreXMLConverter-tinyxmlparser.obj `if test -f 'tinyxmlparser.cpp'; then $(CYGPATH_W) 'tinyxmlparser.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlparser.cpp'; fi`
+-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Tpo $(DEPDIR)/OgreXMLConverter-tinyxmlparser.Po
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tinyxmlparser.cpp' object='OgreXMLConverter-tinyxmlparser.obj' libtool=no @AMDEPBACKSLASH@
 -@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 -@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(OgreXMLConverter_CXXFLAGS) $(CXXFLAGS) -c -o OgreXMLConverter-tinyxmlparser.obj `if test -f 'tinyxmlparser.cpp'; then $(CYGPATH_W) 'tinyxmlparser.cpp'; else $(CYGPATH_W) '$(srcdir)/tinyxmlparser.cpp'; fi`
 -
  mostlyclean-libtool:
  	-rm -f *.lo
- 
-diff -up ogre/Tools/XMLConverter/include/Makefile.am~ ogre/Tools/XMLConverter/include/Makefile.am
---- ogre/Tools/XMLConverter/include/Makefile.am~	2008-05-22 12:02:52.000000000 +0200
-+++ ogre/Tools/XMLConverter/include/Makefile.am	2008-05-22 12:02:52.000000000 +0200
-@@ -1,5 +1,3 @@
- noinst_HEADERS = OgreXMLMeshSerializer.h \
-                  OgreXMLPrerequisites.h \
--                 OgreXMLSkeletonSerializer.h \
--                 tinystr.h \
--                 tinyxml.h
-+                 OgreXMLSkeletonSerializer.h
-diff -up ogre/Tools/XMLConverter/include/Makefile.in~ ogre/Tools/XMLConverter/include/Makefile.in
---- ogre/Tools/XMLConverter/include/Makefile.in~	2008-05-22 12:03:01.000000000 +0200
-+++ ogre/Tools/XMLConverter/include/Makefile.in	2008-05-22 12:03:01.000000000 +0200
-@@ -223,9 +223,7 @@ target_os = @target_os@
- target_vendor = @target_vendor@
- noinst_HEADERS = OgreXMLMeshSerializer.h \
-                  OgreXMLPrerequisites.h \
--                 OgreXMLSkeletonSerializer.h \
--                 tinystr.h \
--                 tinyxml.h
-+                 OgreXMLSkeletonSerializer.h
- 
- all: all-am
  
