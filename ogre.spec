@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -215,6 +215,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 17 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-2
+- Rebuild for ois 1.2
+
 * Mon Sep 28 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.4-1
 - New upstream release 1.6.4
 
