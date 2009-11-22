@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -33,7 +33,7 @@ BuildRequires:  tinyxml-devel
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
 flexible 3D engine written in C++ designed to make it easier and more
-intuitive for developers to produce applications utilising
+intuitive for developers to produce applications utilizing
 hardware-accelerated 3D graphics. The class library abstracts all the
 details of using the underlying system libraries like Direct3D and
 OpenGL and provides an interface based on world objects and other
@@ -106,13 +106,15 @@ for i in api/OgreParticleEmitter_8h-source.html \
 done
 # Add lgpl.txt symlink for links in License.html
 rm -r Docs/licenses/*
-ln -s COPYING Docs/licenses/lgpl.txt
+ln -s ../COPYING Docs/licenses/lgpl.txt
 # remove included tinyxml headers to ensure use of system headers
 rm Tools/XMLConverter/include/tiny*
 
 
 %build
 %configure --disable-cg --disable-devil --enable-openexr
+# Don't link to unneeded stuff
+sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -193,7 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_bindir}/Ogre-Samples
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
-/etc/ld.so.conf.d/*
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -215,6 +217,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 21 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-3
+- Spec file cleanups
+
 * Tue Nov 17 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-2
 - Rebuild for ois 1.2
 
