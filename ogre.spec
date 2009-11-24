@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -23,6 +23,7 @@ Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.6.4-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
+Patch4:         ogre-renderer-libs.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -79,6 +80,7 @@ with the wrapper script called "Ogre-Samples".
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
+%patch4 -p1
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -217,6 +219,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 23 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-4
+- Allow CEGIUOgreRenderer to find needed libraries
+
 * Sat Nov 21 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-3
 - Spec file cleanups
 
