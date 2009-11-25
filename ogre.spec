@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -23,6 +23,7 @@ Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.6.4-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
+Patch4:         ogre-renderer-libs.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -33,7 +34,7 @@ BuildRequires:  tinyxml-devel
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
 flexible 3D engine written in C++ designed to make it easier and more
-intuitive for developers to produce applications utilising
+intuitive for developers to produce applications utilizing
 hardware-accelerated 3D graphics. The class library abstracts all the
 details of using the underlying system libraries like Direct3D and
 OpenGL and provides an interface based on world objects and other
@@ -79,6 +80,7 @@ with the wrapper script called "Ogre-Samples".
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
+%patch4 -p1
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -106,13 +108,15 @@ for i in api/OgreParticleEmitter_8h-source.html \
 done
 # Add lgpl.txt symlink for links in License.html
 rm -r Docs/licenses/*
-ln -s COPYING Docs/licenses/lgpl.txt
+ln -s ../COPYING Docs/licenses/lgpl.txt
 # remove included tinyxml headers to ensure use of system headers
 rm Tools/XMLConverter/include/tiny*
 
 
 %build
 %configure --disable-cg --disable-devil --enable-openexr
+# Don't link to unneeded stuff
+sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
 # Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -193,7 +197,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_bindir}/Ogre-Samples
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
-/etc/ld.so.conf.d/*
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -215,6 +219,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 24 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-2
+- Allow CEGIUOgreRenderer to find needed libraries
+- Spec file cleanups
+
 * Mon Sep 28 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.4-1
 - New upstream release 1.6.4
 
