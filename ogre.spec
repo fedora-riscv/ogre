@@ -23,6 +23,7 @@ Patch0:         ogre-1.2.1-rpath.patch
 Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.4.7-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
+Patch4:         ogre-include-8958.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -79,6 +80,7 @@ with the wrapper script called "Ogre-Samples".
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1
+%patch4
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -190,7 +192,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_bindir}/Ogre-Samples
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
-/etc/ld.so.conf.d/*
+%configure(noreplace) /etc/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -212,6 +214,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 28 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.1-6
+- Backport fix to broken include files from commit 8859
+- Note ld config file is a config file
+
 * Fri Mar 06 2009 Alexey Torkhov <atorkhov@gmail.com> - 1.6.1-5
 - Add licenses of samples to License tag
 

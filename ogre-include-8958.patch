@@ -1,0 +1,129 @@
+Index: OgreMain/include/WIN32/OgreConfigDialogImp.h
+===================================================================
+--- OgreMain/include/WIN32/OgreConfigDialogImp.h	(revision 8957)
++++ OgreMain/include/WIN32/OgreConfigDialogImp.h	(revision 8958)
+@@ -29,7 +29,7 @@
+ #ifndef __Win32ConfigDialog_H__
+ #define __Win32ConfigDialog_H__
+ 
+-#include "OgrePrerequisites.h"
++#include "../OgrePrerequisites.h"
+ 
+ #define WIN32_LEAN_AND_MEAN
+ #define NOMINMAX // required to stop windows.h messing up std::min
+Index: OgreMain/include/OSX/OgreErrorDialogImp.h
+===================================================================
+--- OgreMain/include/OSX/OgreErrorDialogImp.h	(revision 8957)
++++ OgreMain/include/OSX/OgreErrorDialogImp.h	(revision 8958)
+@@ -29,7 +29,7 @@
+ #ifndef __OSXErrorDialog_H__
+ #define __OSXErrorDialog_H__
+ 
+-#include <Ogre/OgrePrerequisites.h>
++#include "../OgrePrerequisites.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/OSX/OgreTimerImp.h
+===================================================================
+--- OgreMain/include/OSX/OgreTimerImp.h	(revision 8957)
++++ OgreMain/include/OSX/OgreTimerImp.h	(revision 8958)
+@@ -30,7 +30,7 @@
+ #ifndef __OSXTimer_H__
+ #define __OSXTimer_H__
+ 
+-#include <Ogre/OgrePrerequisites.h>
++#include "../OgrePrerequisites.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/OSX/OgreConfigDialogImp.h
+===================================================================
+--- OgreMain/include/OSX/OgreConfigDialogImp.h	(revision 8957)
++++ OgreMain/include/OSX/OgreConfigDialogImp.h	(revision 8958)
+@@ -1,9 +1,9 @@
+ #ifndef __OSXConfigDialog_H__
+ #define __OSXConfigDialog_H__
+ 
+-#include <Ogre/OgrePrerequisites.h>
+-#include <Ogre/OgreRoot.h>
+-#include <Ogre/OgreRenderSystem.h>
++#include "../OgrePrerequisites.h"
++#include "../OgreRoot.h"
++#include "../OgreRenderSystem.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/GLX/OgreErrorDialogImp.h
+===================================================================
+--- OgreMain/include/GLX/OgreErrorDialogImp.h	(revision 8957)
++++ OgreMain/include/GLX/OgreErrorDialogImp.h	(revision 8958)
+@@ -29,7 +29,7 @@
+ #ifndef __OGRE_GLX_ERROR_DIALOG_H__
+ #define __OGRE_GLX_ERROR_DIALOG_H__
+ 
+-#include "OgrePrerequisites.h"
++#include "../OgrePrerequisites.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/GLX/OgreTimerImp.h
+===================================================================
+--- OgreMain/include/GLX/OgreTimerImp.h	(revision 8957)
++++ OgreMain/include/GLX/OgreTimerImp.h	(revision 8958)
+@@ -30,7 +30,7 @@
+ #ifndef __GLXTimer_H__
+ #define __GLXTimer_H__
+ 
+-#include "OgrePrerequisites.h"
++#include "../OgrePrerequisites.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/GLX/OgreConfigDialogImp.h
+===================================================================
+--- OgreMain/include/GLX/OgreConfigDialogImp.h	(revision 8957)
++++ OgreMain/include/GLX/OgreConfigDialogImp.h	(revision 8958)
+@@ -30,9 +30,9 @@
+ #ifndef __GLXCONFIGDIALOG_H__
+ #define __GLXCONFIGDIALOG_H__
+ 
+-#include "OgrePrerequisites.h"
+-#include "OgreRoot.h"
+-#include "OgreRenderSystem.h"
++#include "../OgrePrerequisites.h"
++#include "../OgreRoot.h"
++#include "../OgreRenderSystem.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/gtk/OgreErrorDialogImp.h
+===================================================================
+--- OgreMain/include/gtk/OgreErrorDialogImp.h	(revision 8957)
++++ OgreMain/include/gtk/OgreErrorDialogImp.h	(revision 8958)
+@@ -29,7 +29,7 @@
+ #ifndef __OGRE_GLX_ERROR_DIALOG_H__
+ #define __OGRE_GLX_ERROR_DIALOG_H__
+ 
+-#include "OgrePrerequisites.h"
++#include "../OgrePrerequisites.h"
+ 
+ namespace Ogre
+ {
+Index: OgreMain/include/gtk/OgreConfigDialogImp.h
+===================================================================
+--- OgreMain/include/gtk/OgreConfigDialogImp.h	(revision 8957)
++++ OgreMain/include/gtk/OgreConfigDialogImp.h	(revision 8958)
+@@ -30,9 +30,9 @@
+ #ifndef __GLXCONFIGDIALOG_H__
+ #define __GLXCONFIGDIALOG_H__
+ 
+-#include "OgrePrerequisites.h"
+-#include "OgreRoot.h"
+-#include "OgreRenderSystem.h"
++#include "../OgrePrerequisites.h"
++#include "../OgreRoot.h"
++#include "../OgreRenderSystem.h"
+ 
+ #include <gtk/gtk.h>
+ 
