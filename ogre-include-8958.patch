@@ -2,7 +2,7 @@ Index: OgreMain/include/WIN32/OgreConfigDialogImp.h
 ===================================================================
 --- OgreMain/include/WIN32/OgreConfigDialogImp.h	(revision 8957)
 +++ OgreMain/include/WIN32/OgreConfigDialogImp.h	(revision 8958)
-@@ -29,6 +29,6 @@
+@@ -29,7 +29,7 @@
  #ifndef __Win32ConfigDialog_H__
  #define __Win32ConfigDialog_H__
  
@@ -10,6 +10,7 @@ Index: OgreMain/include/WIN32/OgreConfigDialogImp.h
 +#include "../OgrePrerequisites.h"
  
  #define WIN32_LEAN_AND_MEAN
+ #include "windows.h"
 Index: OgreMain/include/OSX/OgreErrorDialogImp.h
 ===================================================================
 --- OgreMain/include/OSX/OgreErrorDialogImp.h	(revision 8957)
