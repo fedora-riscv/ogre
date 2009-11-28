@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+ with exceptions - main library
 # CC-BY-SA - devel docs
@@ -24,6 +24,14 @@ Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.6.4-system-tinyxml.patch
 Patch3:         ogre-1.6.1-fix-ppc-build.patch
 Patch4:         ogre-renderer-libs.patch
+Patch5:         ogre-vertex-split-poses-9195.patch
+Patch6:         ogre-RenderQueueGroupID-doc-9196.patch
+Patch7:         ogre-multiple-contexts-GL-9202.patch
+Patch8:         ogre-default-shadows-9213.patch
+Patch9:         ogre-no-empty-dropdowns-9269.patch
+Patch10:        ogre-modifiers-option-9283.patch
+Patch11:        ogre-NULL-fix-9337.patch
+Patch12:        ogre-line-list-stencil-shadows-9342.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -81,6 +89,14 @@ with the wrapper script called "Ogre-Samples".
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch4 -p1
+%patch5
+%patch6
+%patch7
+%patch8
+%patch9
+%patch10
+%patch11
+%patch12
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -219,6 +235,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 28 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-3
+- Get upstream fixes since 1.6.4 release. This includes a couple of crash bugs.
+
 * Tue Nov 24 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-2
 - Allow CEGIUOgreRenderer to find needed libraries
 - Spec file cleanups
