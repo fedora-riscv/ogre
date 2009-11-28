@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.6.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # LGPLv2+  - main library
 # CC-BY-SA - devel docs
