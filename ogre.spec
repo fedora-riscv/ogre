@@ -192,7 +192,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_bindir}/Ogre-Samples
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
-%configure(noreplace) /etc/ld.so.conf.d/*
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
