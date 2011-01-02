@@ -6,6 +6,7 @@ Summary:        Object-Oriented Graphics Rendering Engine
 # CC-BY-SA - devel docs
 # Freely redistributable without restriction - most of samples content
 # MIT      - shaders for DeferredShadingMedia samples
+# Public Domain - Some of the build files, samples and plugins
 License:        MIT with exceptions and CC-BY-SA and Freely redistributable without restriction
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
