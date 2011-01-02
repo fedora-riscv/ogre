@@ -1,0 +1,6 @@
+--- /dev/null	2010-12-22 19:33:04.813000034 -0600
++++ Tools/rcapsdump/CMakeLists.txt	2011-01-02 10:19:18.000000000 -0600
+@@ -0,0 +1,3 @@
++# Configure rcapsdump
++
++target_link_libraries(${OGRE_LIBRARIES} -lPocoFoundation)
