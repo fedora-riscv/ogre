@@ -1,43 +1,37 @@
 Name:           ogre
-Version:        1.6.4
-Release:        5%{?dist}
+Version:        1.7.2
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
-# LGPLv2+ with exceptions - main library
+# MIT with exceptions - main library
 # CC-BY-SA - devel docs
 # Freely redistributable without restriction - most of samples content
 # MIT      - shaders for DeferredShadingMedia samples
-License:        LGPLv2+ with exceptions and CC-BY-SA and Freely redistributable without restriction and MIT
+License:        MIT with exceptions and CC-BY-SA and Freely redistributable without restriction
 Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
+# Update local glew copy to 1.5.5
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
-# - GLEW sources (RenderSystems/GL/include/GL, RenderSystems/GL/src/GL/glew.cpp) updated to 1.5.1 - upstream doesn't want to update http://www.ogre3d.org/phpBB2/viewtopic.php?t=44558
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # - Non-free fonts under Samples/Media/fonts removed
+# - Non-free textures under Samples/Media/materials/textures/nvidia
 Source0:        %{name}-%{version}-clean.tar.bz2
 Source1:        ogre-samples.sh
-Patch0:         ogre-1.2.1-rpath.patch
+Patch0:         ogre-1.7.2-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
 # Upstream patch to GLEW applied to new version
 Patch1:         ogre-1.6.0rc1-glew.patch
-Patch2:         ogre-1.6.4-system-tinyxml.patch
-Patch3:         ogre-1.6.1-fix-ppc-build.patch
-Patch4:         ogre-renderer-libs.patch
-Patch5:         ogre-vertex-split-poses-9195.patch
-Patch6:         ogre-RenderQueueGroupID-doc-9196.patch
-Patch7:         ogre-multiple-contexts-GL-9202.patch
-Patch8:         ogre-default-shadows-9213.patch
-Patch9:         ogre-no-empty-dropdowns-9269.patch
-Patch10:        ogre-modifiers-option-9283.patch
-Patch11:        ogre-NULL-fix-9337.patch
-Patch12:        ogre-line-list-stencil-shadows-9342.patch
+Patch2:         ogre-1.7.2-system-tinyxml.patch
+Patch3:         ogre-1.7.2-fix-ppc-build.patch
+Patch4:         ogre-1.7.2-fix-pkgconfig-libdir.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
-#BuildRequires:  glew-devel
+BuildRequires:  glew-devel, poco-devel, tbb-devel
 BuildRequires:  tinyxml-devel
+BuildRequires:	cmake
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -83,38 +77,26 @@ with the wrapper script called "Ogre-Samples".
 
 
 %prep
-%setup -q -n ogre
+%setup -q
 %patch0 -p1 -z .rpath
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
-%patch4 -p1
-%patch5
-%patch6
-%patch7
-%patch8
-%patch9
-%patch10
-%patch11
-%patch12
+%patch4 -p1 -z .pkgconfig
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
 # Fix path to Media files for the Samples
-sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
-  Samples/Common/bin/resources.cfg
+# sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
+#  Samples/Common/bin/resources.cfg
 # Remove spurious execute buts from some Media files
-chmod -x `find Samples/Media/DeferredShadingMedia -type f` \
-  Samples/Media/overlays/Example-DynTex.overlay \
-  Samples/Media/gui/TaharezLook.looknfeel \
-  Samples/Media/gui/Falagard.xsd \
-  Samples/Media/materials/scripts/Example-DynTex.material
+chmod -x `find Samples/Media/DeferredShadingMedia -type f`
 # create a clean version of the api docs for %%doc
 mkdir api
 find . \( -wholename './Docs/api/html/*.html' -or \
   -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
   -or -wholename './Docs/api/html/*.css' \) -exec cp --target-directory='api' '{}' +
-for i in api/OgreParticleEmitter_8h-source.html \
+for i in api/OgreParticleEmitter_8h_source.html \
          api/classOgre_1_1ParticleSystem.html \
          api/classOgre_1_1DynLib.html \
          api/classOgre_1_1ParticleEmitter.html; do
@@ -130,29 +112,17 @@ rm Tools/XMLConverter/include/tiny*
 
 
 %build
-%configure --disable-cg --disable-devil --enable-openexr
-# Don't link to unneeded stuff
-sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
-# Don't use rpath!
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-# Stop ogre from linking the GL render plugin against the system libOgre
-# instead of the just build one.
-sed -i 's|-L%{_libdir}||g' `find -name Makefile`
+mkdir build
+cd build
+%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_libdir}
 make %{?_smp_mflags}
 
+# Build rcapsdump
+gcc %{optflags} -o rcapsdump -I./include -I../OgreMain/include/ ../Tools/rcapsdump/src/main.cpp -L./lib -lOgreMain -lstdc++
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_libdir}/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/OGRE/*.la
-
-# These 2 not really public header files are needed for ogre4j
-install -p -m 644 \
-  OgreMain/include/OgreOptimisedUtil.h \
-  OgreMain/include/OgrePlatformInformation.h \
-  $RPM_BUILD_ROOT%{_includedir}/OGRE
+cd build
+make DESTDIR=$RPM_BUILD_ROOT install
 
 # Create config for ldconfig
 mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d
@@ -160,28 +130,25 @@ echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
 
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-# The Sample binaries get installed into the buildroot in a subdir of
-# the cwd??
-mv $RPM_BUILD_ROOT`pwd`/Samples/Common/bin/* \
-  $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-for cfg in plugins.cfg media.cfg quake3settings.cfg resources.cfg; do
-  install -p -m 644 Samples/Common/bin/$cfg \
+install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
+  install -p -m 644 inst/bin/release/$cfg \
     $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 done
 sed -i 's|^PluginFolder=.*$|PluginFolder=%{_libdir}/OGRE|' \
     $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/plugins.cfg
-# Change location of pak + switch from non-free chiropteraDM map
-sed -i 's|^Pak0Location: ../../Media/.*$|Pak0Location: %{_datadir}/OGRE/Samples/Media/packs/ogretestmap.zip|' \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+# Change location of archive + switch from non-free chiropteraDM map
+sed -i 's|^Archive: /usr/share/OGRE/media/packs/chiropteraDM.pk3*$|Archive: %{_datadir}/OGRE/Samples/Media/packs/ogretestmap.zip|' \
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quakemap.cfg
 sed -i 's|^Map:.*$|Map: ogretestmap.bsp|' \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quake3settings.cfg
+    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quakemap.cfg
 # Fixing bug with wrong case for media
-mv Samples/Media/PCZAppMedia/ROOM_NY.mesh Samples/Media/PCZAppMedia/room_ny.mesh
-mv Samples/Media/PCZAppMedia/ROOM_PY.mesh Samples/Media/PCZAppMedia/room_py.mesh
+mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
+mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
 install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
-cp -a Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
+cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
 ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluebold.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
@@ -191,10 +158,8 @@ ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/solo5.ttf       
 
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
+# Install rcapsdump
+install -p -m 755 rcapsdump $RPM_BUILD_ROOT%{_bindir}/
 
 %post -p /sbin/ldconfig
 
@@ -207,7 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs/ChangeLog.html Docs/License.html Docs/licenses Docs/ReadMe.html Docs/style.css Docs/ogre-logo*.gif
 %{_bindir}/Ogre*
 %{_bindir}/rcapsdump
-%{_libdir}/lib*Ogre*-%{version}.so
+%{_libdir}/lib*Ogre*.so.*
 %{_libdir}/OGRE
 %{_datadir}/OGRE
 %exclude %{_bindir}/Ogre-Samples
@@ -217,24 +182,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(-,root,root,-)
-%{_libdir}/libOgreMain.so
-%{_libdir}/libCEGUIOgreRenderer.so
+%{_libdir}/lib*Ogre*.so
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
 
 %files devel-doc
 %defattr(-,root,root,-)
-%doc LINUX.DEV api Docs/manual Docs/shadows Docs/vbo-update Docs/style.css
+%doc api Docs/manual Docs/shadows Docs/vbo-update Docs/style.css
 
 %files samples
 %defattr(-,root,root)
-%doc Samples/ReadMe.html
 %{_bindir}/Ogre-Samples
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/Samples
 
 
 %changelog
+* Tue Dec 21 2010 Tom Callaway <spot@fedoraproject.org> - 1.7.2-1
+- move to 1.7.2
+
 * Sat Nov 28 2009 Bruno Wolff III <bruno@wolff.to> - 1.6.4-5
 - Get upstream fixes since 1.6.4 release. This includes a couple of crash bugs.
 
