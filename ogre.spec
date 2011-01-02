@@ -60,6 +60,7 @@ Install this package if you want to develop programs that use Ogre.
 Summary:        Ogre development documentation
 Group:          Documentation
 Requires:       %{name} = %{version}-%{release}
+BuildRequires:  doxygen
 
 %description devel-doc
 This package contains the Ogre API documentation and the Ogre development
