@@ -34,6 +34,7 @@ BuildRequires:  ois-devel freeimage-devel openexr-devel
 BuildRequires:  glew-devel, poco-devel, tbb-devel
 BuildRequires:  tinyxml-devel
 BuildRequires:	cmake
+BuildRequires:  cppunit
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
