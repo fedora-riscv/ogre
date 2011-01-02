@@ -3,4 +3,4 @@
 @@ -0,0 +1,3 @@
 +# Configure rcapsdump
 +
-+target_link_libraries(${OGRE_LIBRARIES} -lPocoFoundation)
++target_link_libraries(rcapsdump ${OGRE_LIBRARIES} ${OGRE_THREAD_LIBRARIES})
