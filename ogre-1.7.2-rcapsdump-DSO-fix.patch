@@ -4,3 +4,11 @@
 +# Configure rcapsdump
 +
 +target_link_libraries(rcapsdump ${OGRE_LIBRARIES} ${OGRE_THREAD_LIBRARIES})
+--- Tools/CMakeLists.txt.orig	2011-01-02 11:44:59.000000000 -0600
++++ Tools/CMakeLists.txt	2011-01-02 11:45:17.000000000 -0600
+@@ -13,4 +13,5 @@
+ if (NOT OGRE_BUILD_PLATFORM_IPHONE)
+   add_subdirectory(XMLConverter)
+   add_subdirectory(MeshUpgrader)
++  add_subdirectory(rcapsdump)
+ endif (NOT OGRE_BUILD_PLATFORM_IPHONE)
