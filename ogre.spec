@@ -26,7 +26,7 @@ Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.7.2-system-tinyxml.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch4:         ogre-1.7.2-fix-pkgconfig-libdir.patch
-Patch5:         ogre-1.7.2-rcapsdump-DSO-fix.patch
+Patch5:         ogre-1.7.2-build-rcapsdump.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -87,7 +87,7 @@ with the wrapper script called "Ogre-Samples".
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch4 -p1 -z .pkgconfig
-%patch5 -p0 -z .rcapsdump-DSO
+%patch5 -p0 -z .build-rcapsdump
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -121,9 +121,6 @@ mkdir build
 cd build
 %cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_libdir}
 make %{?_smp_mflags}
-
-# Build rcapsdump
-gcc %{optflags} -o rcapsdump -I./include -I../OgreMain/include/ ../Tools/rcapsdump/src/main.cpp -L./lib -lOgreMain -lstdc++
 
 %install
 cd build
