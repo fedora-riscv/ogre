@@ -8,7 +8,7 @@
 +add_subdirectory(rcapsdump)
 --- /dev/null	2010-12-22 19:33:04.813000034 -0600
 +++ Tools/rcapsdump/CMakeLists.txt	2011-01-02 13:11:25.000000000 -0600
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,9 @@
 +# Configure rcapsdump
 +
 +set(SOURCE_FILES 
@@ -16,4 +16,5 @@
 +)
 +
 +add_executable(rcapsdump ${SOURCE_FILES})
-+target_link_libraries(rcapsdump ${OGRE_LIBRARIES} ${OGRE_THREAD_LIBRARIES})
++target_link_libraries(rcapsdump ${OGRE_LIBRARIES})
++ogre_config_tool(rcapsdump)
