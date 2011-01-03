@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -51,6 +51,7 @@ Summary:        Ogre header files and documentation
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
+Requires:       poco-devel
 
 %description devel
 This package contains the header files for Ogre.
@@ -197,6 +198,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Mon Jan 03 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-2
+- ogre-devel requires poco-devel to make sure references to poco headers works.
+
 * Tue Dec 21 2010 Tom Callaway <spot@fedoraproject.org> - 1.7.2-1
 - move to 1.7.2
 
