@@ -160,9 +160,6 @@ ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/solo5.ttf       
 
-# Install rcapsdump
-install -p -m 755 rcapsdump $RPM_BUILD_ROOT%{_bindir}/
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
