@@ -33,7 +33,7 @@ BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
 BuildRequires:  glew-devel, poco-devel, tbb-devel
 BuildRequires:  tinyxml-devel
-BuildRequires:	cmake
+BuildRequires:  cmake
 BuildRequires:  cppunit-devel
 
 %description
