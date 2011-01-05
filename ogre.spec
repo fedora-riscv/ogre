@@ -196,6 +196,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Wed Jan 05 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-5
+- Drop ttb requirement entirely.
+
 * Wed Jan 05 2011 Dan Horák <dan[at]danny.cz> - 1.7.2-4
 - tbb is available only on selected architectures
 
