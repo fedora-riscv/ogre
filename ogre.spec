@@ -18,7 +18,6 @@ URL:            http://www.ogre3d.org/
 # - Non-free fonts under Samples/Media/fonts removed
 # - Non-free textures under Samples/Media/materials/textures/nvidia
 Source0:        %{name}-%{version}-clean.tar.bz2
-Source1:        ogre-samples.sh
 Patch0:         ogre-1.7.2-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
 # Upstream patch to GLEW applied to new version
@@ -148,7 +147,7 @@ sed -i 's|^Map:.*$|Map: ogretestmap.bsp|' \
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
 mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
-install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/Ogre-Samples
+install -p -m 755 bin/SampleBrowser $RPM_BUILD_ROOT%{_bindir}/SampleBrowser
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
 cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
@@ -192,12 +191,15 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 %files samples
 %defattr(-,root,root)
-%{_bindir}/Ogre-Samples
+%{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/Samples
 
 
 %changelog
+* Wed Jan 05 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-3
+- Use SampleBrowser instead of out of date ogre-samples script
+
 * Mon Jan 03 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-2
 - ogre-devel requires poco-devel to make sure references to poco headers works.
 
