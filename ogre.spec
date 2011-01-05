@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
