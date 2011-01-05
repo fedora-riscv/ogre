@@ -110,9 +110,9 @@ for i in api/OgreParticleEmitter_8h_source.html \
   touch -r $i api/tmp
   mv api/tmp $i
 done
-# Add lgpl.txt symlink for links in License.html
+# Add mit.txt symlink for links in License.html
 rm -r Docs/licenses/*
-ln -s ../COPYING Docs/licenses/lgpl.txt
+ln -s ../COPYING Docs/licenses/mit.txt
 # remove included tinyxml headers to ensure use of system headers
 rm Tools/XMLConverter/include/tiny*
 
