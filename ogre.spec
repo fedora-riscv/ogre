@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -31,9 +31,6 @@ BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
 BuildRequires:  glew-devel, poco-devel
-%ifarch %{ix86} x86_64 ia64
-BuildRequires:  tbb-devel
-%endif
 BuildRequires:  tinyxml-devel
 BuildRequires:  cmake
 BuildRequires:  cppunit-devel
