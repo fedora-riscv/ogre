@@ -76,9 +76,8 @@ Requires:       %{name} = %{version}-%{release}, dejavu-sans-fonts
 %description samples
 This package contains the compiled (not the source) sample applications coming
 with Ogre.  It also contains some media (meshes, textures,...) needed by these
-samples. The samples are installed in %{_libdir}/Samples and can be executed
-with the wrapper script called "Ogre-Samples".
-
+samples. The samples are installed in %{_libdir}/Samples/*.so and can be run
+using SampleBrowser.
 
 %prep
 %setup -q
@@ -174,7 +173,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_libdir}/lib*Ogre*.so.*
 %{_libdir}/OGRE
 %{_datadir}/OGRE
-%exclude %{_bindir}/Ogre-Samples
+%exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/Samples
 %config(noreplace) /etc/ld.so.conf.d/*
