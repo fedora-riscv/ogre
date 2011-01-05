@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -30,7 +30,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
-BuildRequires:  glew-devel, poco-devel, tbb-devel
+BuildRequires:  glew-devel, poco-devel
+%ifarch %{ix86} x86_64 ia64
+BuildRequires:  tbb-devel
+%endif
 BuildRequires:  tinyxml-devel
 BuildRequires:  cmake
 BuildRequires:  cppunit-devel
@@ -196,6 +199,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Wed Jan 05 2011 Dan Horák <dan[at]danny.cz> - 1.7.2-4
+- tbb is available only on selected architectures
+
 * Wed Jan 05 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-3
 - Use SampleBrowser instead of out of date ogre-samples script
 
