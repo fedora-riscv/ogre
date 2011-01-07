@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -30,7 +30,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  cegui-devel zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
-BuildRequires:  glew-devel, poco-devel
+BuildRequires:  glew-devel
+BuildRequires:  boost-devel
+# BuildRequires:  poco-devel
 BuildRequires:  tinyxml-devel
 BuildRequires:  cmake
 BuildRequires:  cppunit-devel
@@ -50,7 +52,8 @@ Summary:        Ogre header files and documentation
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
-Requires:       poco-devel
+# Requires:       poco-devel
+Requires:	boost-devel
 
 %description devel
 This package contains the header files for Ogre.
@@ -196,6 +199,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Fri Jan 07 2011 Tom Callaway <spot@fedoraproject.org> - 1.7.2-6
+- BuildRequires: boost-devel for threading, Remove poco-devel from BR
+
 * Wed Jan 05 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-5
 - Drop ttb requirement entirely.
 
