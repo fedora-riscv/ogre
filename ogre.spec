@@ -133,17 +133,11 @@ echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+mkdir -p $RPM_BUILD_ROOT%{_etcdir}/OGRE
 for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   install -p -m 644 inst/bin/release/$cfg \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
+    $RPM_BUILD_ROOT%{_etcdir}/OGRE/
 done
-sed -i 's|^PluginFolder=.*$|PluginFolder=%{_libdir}/OGRE|' \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/plugins.cfg
-# Change location of archive + switch from non-free chiropteraDM map
-sed -i 's|^Archive: /usr/share/OGRE/media/packs/chiropteraDM.pk3*$|Archive: %{_datadir}/OGRE/Samples/Media/packs/ogretestmap.zip|' \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quakemap.cfg
-sed -i 's|^Map:.*$|Map: ogretestmap.bsp|' \
-    $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples/quakemap.cfg
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
 mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
@@ -175,6 +169,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_libdir}/lib*Ogre*.so.*
 %{_libdir}/OGRE
 %{_datadir}/OGRE
+%dir %{_etcdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/media
@@ -195,12 +190,17 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/media
+%{_etcdir}/OGRE/plugins.cfg
+%{_etcdir}/OGRE/quakemap.cfg
+%{_etcdir}/OGRE/resources.cfg
+%{_etcdir}/OGRE/samples.cfg
 
 
 %changelog
 * Mon Jan 10 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-7
 - Exclude CMakeLists.txt from Media
 - Install Samples media where Ogre expects it.
+- Ogre expects the *.cfg files in /etc/OGRE
 
 * Fri Jan 07 2011 Tom Callaway <spot@fedoraproject.org> - 1.7.2-6
 - BuildRequires: boost-devel for threading, Remove poco-devel from BR
