@@ -136,7 +136,7 @@ install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 mkdir -p $RPM_BUILD_ROOT/etc/OGRE
 for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   install -p -m 644 inst/bin/release/$cfg \
-    $RPM_BUILD_ROOT%/etc/OGRE/
+    $RPM_BUILD_ROOT/etc/OGRE/
 done
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
