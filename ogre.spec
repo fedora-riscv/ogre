@@ -133,10 +133,10 @@ echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-mkdir -p $RPM_BUILD_ROOT%{_etcdir}/OGRE
+mkdir -p $RPM_BUILD_ROOT/etc/OGRE
 for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   install -p -m 644 inst/bin/release/$cfg \
-    $RPM_BUILD_ROOT%{_etcdir}/OGRE/
+    $RPM_BUILD_ROOT%/etc/OGRE/
 done
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
@@ -169,7 +169,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_libdir}/lib*Ogre*.so.*
 %{_libdir}/OGRE
 %{_datadir}/OGRE
-%dir %{_etcdir}/OGRE
+%dir /etc/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/media
@@ -190,10 +190,10 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/media
-%{_etcdir}/OGRE/plugins.cfg
-%{_etcdir}/OGRE/quakemap.cfg
-%{_etcdir}/OGRE/resources.cfg
-%{_etcdir}/OGRE/samples.cfg
+/etc/OGRE/plugins.cfg
+/etc/OGRE/quakemap.cfg
+/etc/OGRE/resources.cfg
+/etc/OGRE/samples.cfg
 
 
 %changelog
