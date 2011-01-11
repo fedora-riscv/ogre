@@ -93,8 +93,6 @@ using SampleBrowser.
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
-# Fix path to Media files for the Samples
-# sed -i 's|../../Media|%{_datadir}/OGRE/Samples/Media|g' \
 #  Samples/Common/bin/resources.cfg
 # Remove spurious execute buts from some Media files
 chmod -x `find Samples/Media/DeferredShadingMedia -type f`
@@ -121,7 +119,7 @@ rm Tools/XMLConverter/include/tiny*
 %build
 mkdir build
 cd build
-%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_libdir} -DOGRE_MEDIA_PATH=share/OGRE/Samples/Media
+%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_libdir}
 make %{?_smp_mflags}
 
 %install
@@ -151,17 +149,17 @@ mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_n
 mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
 install -p -m 755 bin/SampleBrowser $RPM_BUILD_ROOT%{_bindir}/SampleBrowser
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
-cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
-rm -f $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/CMakeLists.txt
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/
+cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/media
+rm -f $RPM_BUILD_ROOT%{_datadir}/OGRE/media/CMakeLists.txt
 ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluebold.ttf
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluebold.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluehigh.ttf
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluehigh.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluecond.ttf
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluecond.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/solo5.ttf       
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf       
 
 %post -p /sbin/ldconfig
 
@@ -179,7 +177,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_datadir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
-%exclude %{_datadir}/OGRE/Samples
+%exclude %{_datadir}/OGRE/media
 %config(noreplace) /etc/ld.so.conf.d/*
 
 %files devel
@@ -196,13 +194,13 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %defattr(-,root,root)
 %{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
-%{_datadir}/OGRE/Samples
+%{_datadir}/OGRE/media
 
 
 %changelog
 * Mon Jan 10 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-7
 - Exclude CMakeLists.txt from Media
-- Have cfg files point to correct install location for sample media.
+- Install Samples media where Ogre expects it.
 
 * Fri Jan 07 2011 Tom Callaway <spot@fedoraproject.org> - 1.7.2-6
 - BuildRequires: boost-devel for threading, Remove poco-devel from BR
