@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -153,6 +153,7 @@ install -p -m 755 bin/SampleBrowser $RPM_BUILD_ROOT%{_bindir}/SampleBrowser
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
 cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples
+rm -f $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/CMakeLists.txt
 ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/Samples/Media/fonts/bluebold.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
@@ -199,6 +200,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Mon Jan 10 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-7
+- Exclude CMakeLists.txt from Media
+
 * Fri Jan 07 2011 Tom Callaway <spot@fedoraproject.org> - 1.7.2-6
 - BuildRequires: boost-devel for threading, Remove poco-devel from BR
 
