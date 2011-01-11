@@ -119,7 +119,7 @@ rm Tools/XMLConverter/include/tiny*
 %build
 mkdir build
 cd build
-%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_libdir}
+%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib}
 make %{?_smp_mflags}
 
 %install
@@ -127,16 +127,16 @@ cd build
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # Create config for ldconfig
-mkdir -p $RPM_BUILD_ROOT/etc/ld.so.conf.d
-echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_arch}.conf
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d
+echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 # Install the samples
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
 install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-mkdir -p $RPM_BUILD_ROOT/etc/OGRE
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/OGRE
 for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   install -p -m 644 inst/bin/release/$cfg \
-    $RPM_BUILD_ROOT/etc/OGRE/
+    $RPM_BUILD_ROOT%{_sysconfdir}/OGRE/
 done
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
@@ -169,11 +169,11 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_libdir}/lib*Ogre*.so.*
 %{_libdir}/OGRE
 %{_datadir}/OGRE
-%dir /etc/OGRE
+%dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
 %exclude %{_datadir}/OGRE/media
-%config(noreplace) /etc/ld.so.conf.d/*
+%config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -190,10 +190,10 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/media
-/etc/OGRE/plugins.cfg
-/etc/OGRE/quakemap.cfg
-/etc/OGRE/resources.cfg
-/etc/OGRE/samples.cfg
+%{_sysconfdir}/OGRE/plugins.cfg
+%{_sysconfdir}/OGRE/quakemap.cfg
+%{_sysconfdir}/OGRE/resources.cfg
+%{_sysconfdir}/OGRE/samples.cfg
 
 
 %changelog
