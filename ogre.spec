@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -138,6 +138,13 @@ for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   install -p -m 644 inst/bin/release/$cfg \
     $RPM_BUILD_ROOT%{_sysconfdir}/OGRE/
 done
+
+# Swap out reference to non-free quake map that was removed
+cat << EOF > $RPM_BUILD_ROOT%{_sysconfdir}/OGRE/quakemap.cfg
+Archive: /usr/share/OGRE/media/packs/ogretestmap.zip 
+Map: ogretestmap.bsp
+EOF
+
 # Fixing bug with wrong case for media
 mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
 mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
@@ -197,6 +204,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Tue Jan 11 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-8
+- Fix config for replacement for quake map.
+
 * Mon Jan 10 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-7
 - Exclude CMakeLists.txt from Media
 - Install Samples media where Ogre expects it.
