@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -204,6 +204,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Feb 06 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-9
+- Rebuild for boost soname bump.
+
 * Tue Jan 11 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-8
 - Fix config for replacement for quake map.
 
