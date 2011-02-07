@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -27,7 +27,7 @@ Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch4:         ogre-1.7.2-fix-pkgconfig-libdir.patch
 Patch5:         ogre-1.7.2-build-rcapsdump.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  cegui-devel zziplib-devel freetype-devel
+BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
 BuildRequires:  glew-devel
@@ -204,6 +204,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Mon Feb 07 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-10
+- With ogre 1.7, cegui is no longer a build dependency.
+
 * Sun Feb 06 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-9
 - Rebuild for boost soname bump.
 
