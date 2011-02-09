@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -204,6 +204,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.2-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Mon Feb 07 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-10
 - With ogre 1.7, cegui is no longer a build dependency.
 
