@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.2
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -24,7 +24,6 @@ Patch0:         ogre-1.7.2-rpath.patch
 Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.7.2-system-tinyxml.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
-Patch4:         ogre-1.7.2-fix-pkgconfig-libdir.patch
 Patch5:         ogre-1.7.2-build-rcapsdump.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
@@ -88,7 +87,6 @@ using SampleBrowser.
 %patch1 -p1 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
-%patch4 -p1 -z .pkgconfig
 %patch5 -p0 -z .build-rcapsdump
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -204,6 +202,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Mar 06 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-12
+- Fix broken pkgconfig files
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.2-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
