@@ -84,7 +84,7 @@ using SampleBrowser.
 %prep
 %setup -q
 %patch0 -p1 -z .rpath
-%patch1 -p1 -z .glew
+%patch1 -p0 -z .glew
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
