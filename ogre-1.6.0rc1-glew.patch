@@ -1,6 +1,5 @@
-diff -ur ogre/RenderSystems/GL/src/glew.cpp ogre.new/RenderSystems/GL/src/glew.cpp
---- ogre/RenderSystems/GL/src/glew.cpp	2008-09-28 11:10:34.000000000 +0400
-+++ ogre.new/RenderSystems/GL/src/glew.cpp	2008-09-28 11:12:46.000000000 +0400
+--- RenderSystems/GL/src/glew.cpp.glew	2011-05-14 13:58:04.000000000 -0500
++++ RenderSystems/GL/src/glew.cpp	2011-05-14 14:21:27.000000000 -0500
 @@ -29,6 +29,10 @@
  ** THE POSSIBILITY OF SUCH DAMAGE.
  */
@@ -32,8 +31,8 @@ diff -ur ogre/RenderSystems/GL/src/glew.cpp ogre.new/RenderSystems/GL/src/glew.c
 +#  define GLXEW_CONTEXT_ARG_DEF_LIST Ogre::GLSupport *glSupport
  #endif /* GLEW_MX */
  
- #if defined(__APPLE__)
-@@ -80,7 +84,7 @@
+ #if defined(__sgi) || defined (__sun) || defined(GLEW_APPLE_GLX)
+@@ -127,7 +131,7 @@
      image = NSAddImage("/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL", NSADDIMAGE_OPTION_RETURN_ON_ERROR);
    }
    /* prepend a '_' for the Unix C symbol mangling convention */
@@ -42,7 +41,7 @@ diff -ur ogre/RenderSystems/GL/src/glew.cpp ogre.new/RenderSystems/GL/src/glew.c
    strcpy(symbolName+1, (const char*)name);
    symbolName[0] = '_';
    symbol = NULL;
-@@ -5326,9 +5330,11 @@
+@@ -7968,9 +7972,11 @@
  
  /* ------------------------------------------------------------------------- */
  
@@ -57,7 +56,7 @@ diff -ur ogre/RenderSystems/GL/src/glew.cpp ogre.new/RenderSystems/GL/src/glew.c
  GLenum glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
  {
    const GLubyte* s;
-@@ -7299,11 +7305,15 @@
+@@ -10529,11 +10535,15 @@
  
  #ifdef GLX_VERSION_1_2
  
@@ -74,7 +73,7 @@ diff -ur ogre/RenderSystems/GL/src/glew.cpp ogre.new/RenderSystems/GL/src/glew.c
  
    return r;
  }
-@@ -7976,18 +7986,20 @@
+@@ -11375,18 +11385,20 @@
  extern GLenum glxewContextInit (void);
  #endif /* _WIN32 */
  
