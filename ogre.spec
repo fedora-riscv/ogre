@@ -206,6 +206,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 - Upstream update to 1.7.3
 - Changelog at http://www.ogre3d.org/2011/05/08/ogre-1-7-3-cthugha-released#more-1284
 
+* Mon Apr 04 2011 Jon Ciesla <limb@jcomserv.net> - 1.7.2-14
+- Re-rebuilding for boost 1.46.1, 2011-03-15 rebuild got 1.46.0.
+
 * Tue Mar 15 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.2-13
 - Rebuild for boost 1.46.1 update
 
