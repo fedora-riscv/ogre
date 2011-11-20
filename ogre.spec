@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -202,6 +202,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Nov 20 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.3-3
+- Rebuild for boost soname bump
+
 * Fri Jul 22 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.3-2
 - Rebuild for boost 1.47
 
