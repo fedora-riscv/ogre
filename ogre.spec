@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -202,6 +202,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Sun Nov 20 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.3-3
 - Rebuild for boost soname bump
 
