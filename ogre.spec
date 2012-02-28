@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -202,6 +202,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.3-6
+- Rebuilt for c++ ABI breakage
+
 * Tue Jan 17 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.3-5
 - Rebuild for ois 1.3
 
