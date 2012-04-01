@@ -3,7 +3,7 @@
 set -e
 set -x
 
-version=1.7.3
+version=1.7.4
 
 [ ! -e ogre-${version} ]
 
@@ -14,7 +14,7 @@ cd ogre_src_v$(echo ${version} | tr . -)
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 rm RenderSystems/GL/include/GL/{gl,glext,glxext,glxtokens,wglext}.h
 
-# - GLEW sources updated to 1.5.5
+# - GLEW sources updated to 1.6.0
 rpm -q glew-devel glew-debuginfo
 cp -f /usr/include/GL/{glew,glxew,wglew}.h RenderSystems/GL/include/GL/
 cp -f /usr/src/debug/glew-*/src/glew.c RenderSystems/GL/src/glew.cpp
