@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.7.3
-Release:        6%{?dist}
+Version:        1.7.4
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -12,7 +12,7 @@ Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
-# Update local glew copy to 1.5.5
+# Update local glew copy to 1.6.0
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # - Non-free fonts under Samples/Media/fonts removed
@@ -202,6 +202,10 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Tue Apr 01 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-1
+- Update to upstream 1.7.4
+- This is a minor bugfix update from 1.7.3
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.3-6
 - Rebuilt for c++ ABI breakage
 
