@@ -25,6 +25,8 @@ Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.7.2-system-tinyxml.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch5:         ogre-1.7.2-build-rcapsdump.patch
+# Fixes bug 842041
+Patch6:         ogre-fix-utilSSE.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -88,6 +90,7 @@ using SampleBrowser.
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
+%patch6 -p0 -z .fix-utilSSE
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
