@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -205,6 +205,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Jul 22 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.3-3
+- Fix issue with utilSSE hack breaking under gcc 4.7 (bug 842041)
+
 * Fri Jul 22 2011 Bruno Wolff III <bruno@wolff.to> - 1.7.3-2
 - Rebuild for boost 1.47
 
