@@ -27,6 +27,10 @@ Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch5:         ogre-1.7.2-build-rcapsdump.patch
 # Fixes bug 842041
 Patch6:         ogre-fix-utilSSE.patch
+# Fix for recent versions boost from upstream:
+# http://sourceforge.net/tracker/?func=detail&aid=3517109&group_id=2997&atid=302997
+# Some fuzz adjustments made
+Patch7:         ogre-boost_cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -91,6 +95,7 @@ using SampleBrowser.
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
 %patch6 -p0 -z .fix-utilSSE
+%patch7 -p1 -z .boost-cmake
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -206,7 +211,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 %changelog
 * Fri Aug 10 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-4
-- Rebuild for boost 1.50
+- Fix for boost 1.50
 
 * Sat Jul 21 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-3
 - Fix issue with utilSSE hack breaking under gcc 4.7 (bug 842041)
