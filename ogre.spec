@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -31,6 +31,7 @@ Patch6:         ogre-fix-utilSSE.patch
 # http://sourceforge.net/tracker/?func=detail&aid=3517109&group_id=2997&atid=302997
 # Some fuzz adjustments made
 Patch7:         ogre-boost_cmake.patch
+Patch8:         ogre-1.7.4-arm-ftbfs.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -96,6 +97,7 @@ using SampleBrowser.
 %patch5 -p0 -z .build-rcapsdump
 %patch6 -p0 -z .fix-utilSSE
 %patch7 -p1 -z .boost-cmake
+%patch8 -p0 -z .arm-ftbfs
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -210,6 +212,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Tue Oct 02 2012 Jon Ciesla <limburgher@gmail.com> - 1.7.4-5
+- Fix FTBFS on ARM, based on debian's patch.
+
 * Fri Aug 10 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-4
 - Fix for boost 1.50
 

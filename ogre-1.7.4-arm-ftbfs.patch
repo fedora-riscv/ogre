@@ -1,0 +1,40 @@
+--- OgreMain/src/OgrePlatformInformation.cpp~	2012-01-14 11:40:39.000000000 -0600
++++ OgreMain/src/OgrePlatformInformation.cpp	2012-09-01 14:11:42.220000005 -0500
+@@ -40,10 +40,10 @@
+ #include <signal.h>
+ #include <setjmp.h>
+ 
+-    #if OGRE_CPU == OGRE_CPU_ARM
+-        #include <sys/sysctl.h>
+-        #include <mach/machine.h>
+-    #endif
++//    #if OGRE_CPU == OGRE_CPU_ARM
++//        #include <sys/sysctl.h>
++//        #include <mach/machine.h>
++//    #endif
+ #endif
+ 
+ // Yes, I know, this file looks very ugly, but there aren't other ways to do it better.
+@@ -530,14 +530,14 @@
+ //    done:
+ //        fclose(cpuinfo); 
+         
+-        static char processor[257];
+-        size_t s = sizeof processor;
+-        static int mib[] = { CTL_HW, HW_MODEL };
+-        if (sysctl (mib, 2, processor, &s, 0, 0) >= 0)
+-            cpuID = processor;
+-        else
+-            cpuID = "Unknown ARM";
+-
++//        static char processor[257];
++//        size_t s = sizeof processor;
++//        static int mib[] = { CTL_HW, HW_MODEL };
++//        if (sysctl (mib, 2, processor, &s, 0, 0) >= 0)
++//            cpuID = processor;
++//        else
++//            cpuID = "Unknown ARM";
++//
+ #endif
+         return cpuID;
+     }
