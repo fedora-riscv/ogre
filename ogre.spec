@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.7.4
-Release:        5%{?dist}
+Version:        1.8.1
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -22,16 +22,9 @@ Patch0:         ogre-1.7.2-rpath.patch
 #Patch1:         ogre-1.6.0-system-glew.patch
 # Upstream patch to GLEW applied to new version
 Patch1:         ogre-1.6.0rc1-glew.patch
-Patch2:         ogre-1.7.2-system-tinyxml.patch
+Patch2:         ogre-1.8.1-system-tinyxml.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
-Patch5:         ogre-1.7.2-build-rcapsdump.patch
-# Fixes bug 842041
-Patch6:         ogre-fix-utilSSE.patch
-# Fix for recent versions boost from upstream:
-# http://sourceforge.net/tracker/?func=detail&aid=3517109&group_id=2997&atid=302997
-# Some fuzz adjustments made
-Patch7:         ogre-boost_cmake.patch
-Patch8:         ogre-1.7.4-arm-ftbfs.patch
+Patch5:         ogre-1.8.1-build-rcapsdump.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -52,11 +45,57 @@ details of using the underlying system libraries like Direct3D and
 OpenGL and provides an interface based on world objects and other
 intuitive classes.
 
+%package paging
+Summary:        OGRE component for terrain paging
+Group:          System Environment/Libraries
+Requires:       %{name} = %{version}-%{release}
+
+%description paging
+TODO
+
+%package property
+Summary:        OGRE component for property introspection
+Group:          System Environment/Libraries
+Requires:       %{name} = %{version}-%{release}
+
+%description property
+TODO
+
+%package rtss
+Summary:        OGRE RT Shader System component
+Group:          System Environment/Libraries
+Requires:       %{name} = %{version}-%{release}
+
+%description rtss
+TODO
+
+%package terrain
+Summary:        OGRE component for terrain rendering
+Group:          System Environment/Libraries
+Requires:       %{name} = %{version}-%{release}
+
+%description terrain
+TODO
+
+%package utils
+Summary:        OGRE production pipeline utilities
+Group:          Development/Tools
+Requires:       %{name} = %{version}-%{release}
+
+%description utils
+Contains OgreXMLConverter, it can take .mesh.xml files and convert them into
+their binary variant.
+Also provides OgreMeshUpgrader that can load old Ogre .mesh files and upgrade
+them to the latest version.
 
 %package devel
 Summary:        Ogre header files and documentation
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}-paging = %{version}-%{release}
+Requires:       %{name}-property = %{version}-%{release}
+Requires:       %{name}-rtss = %{version}-%{release}
+Requires:       %{name}-terrain = %{version}-%{release}
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:	boost-devel
@@ -95,14 +134,12 @@ using SampleBrowser.
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
-%patch6 -p0 -z .fix-utilSSE
-%patch7 -p1 -z .boost-cmake
-%patch8 -p0 -z .arm-ftbfs
+
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
 #  Samples/Common/bin/resources.cfg
-# Remove spurious execute buts from some Media files
+# Remove spurious execute bits from some Media files
 chmod -x `find Samples/Media/DeferredShadingMedia -type f`
 # create a clean version of the api docs for %%doc
 mkdir api
@@ -127,7 +164,7 @@ rm Tools/XMLConverter/include/tiny*
 %build
 mkdir build
 cd build
-%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib}
+%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
 make %{?_smp_mflags}
 
 %install
@@ -161,6 +198,7 @@ install -p -m 755 bin/SampleBrowser $RPM_BUILD_ROOT%{_bindir}/SampleBrowser
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/
 cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/media
 rm -f $RPM_BUILD_ROOT%{_datadir}/OGRE/media/CMakeLists.txt
+
 ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluebold.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
@@ -168,31 +206,53 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluecond.ttf
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf       
+  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING
 %doc Docs/ChangeLog.html Docs/License.html Docs/licenses Docs/ReadMe.html Docs/style.css Docs/ogre-logo*.gif
-%{_bindir}/Ogre*
-%{_bindir}/rcapsdump
-%{_libdir}/lib*Ogre*.so.*
+%{_libdir}/libOgreMain.so.*
 %{_libdir}/OGRE
+
 %{_datadir}/OGRE
 %dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
+%exclude %{_libdir}/OGRE/cmake
 %exclude %{_datadir}/OGRE/media
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
+
+%files paging
+%defattr(-,root,root,-)
+%{_libdir}/libOgrePaging.so.*
+
+%files property
+%defattr(-,root,root,-)
+%{_libdir}/libOgreProperty.so.*
+
+%files rtss
+%defattr(-,root,root,-)
+%{_libdir}/libOgreRTShaderSystem.so.*
+
+%files terrain
+%defattr(-,root,root,-)
+%{_libdir}/libOgreTerrain.so.*
+
+%files utils
+%defattr(-,root,root,-)
+%{_bindir}/OgreMeshUpgrader
+%{_bindir}/OgreXMLConverter
+%{_bindir}/rcapsdump
 
 %files devel
 %defattr(-,root,root,-)
 %{_libdir}/lib*Ogre*.so
+%{_libdir}/OGRE/cmake
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
 
@@ -212,6 +272,15 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Fri Nov 30 2012 Martin Preisler <mpreisle@redhat.com> - 1.8.1-1
+- Update to upstream 1.8.1
+
+* Fri Nov 30 2012 Martin Preisler <mpreisle@redhat.com> - 1.8.0-1
+- Update to upstream 1.8.0
+- Split the components into a subpackages
+- Split utils into a subpackage
+- Put cmake modules into the -devel subpackage
+
 * Tue Oct 02 2012 Jon Ciesla <limburgher@gmail.com> - 1.7.4-5
 - Fix FTBFS on ARM, based on debian's patch.
 
