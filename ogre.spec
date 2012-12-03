@@ -51,7 +51,8 @@ Group:          System Environment/Libraries
 Requires:       %{name} = %{version}-%{release}
 
 %description paging
-TODO
+Provides paging functionality. In essence it allows worlds to be rendered
+and loaded at the same time.
 
 %package property
 Summary:        OGRE component for property introspection
@@ -59,7 +60,8 @@ Group:          System Environment/Libraries
 Requires:       %{name} = %{version}-%{release}
 
 %description property
-TODO
+OGRE's property system allows you to associate values of arbitrary type with
+names, and have those values exposed via a self-describing interface.
 
 %package rtss
 Summary:        OGRE RT Shader System component
@@ -67,7 +69,9 @@ Group:          System Environment/Libraries
 Requires:       %{name} = %{version}-%{release}
 
 %description rtss
-TODO
+The Real Time Shader System, or RTSS for short, is a component of Ogre. This
+component is used to generate shaders on the fly based on object material
+properties, scene setup and other user definitions.
 
 %package terrain
 Summary:        OGRE component for terrain rendering
@@ -75,7 +79,8 @@ Group:          System Environment/Libraries
 Requires:       %{name} = %{version}-%{release}
 
 %description terrain
-TODO
+OGRE's terrain component provides rendering of terrain represented by
+heightmaps.
 
 %package utils
 Summary:        OGRE production pipeline utilities
@@ -98,7 +103,7 @@ Requires:       %{name}-rtss = %{version}-%{release}
 Requires:       %{name}-terrain = %{version}-%{release}
 Requires:       pkgconfig
 # Requires:       poco-devel
-Requires:	boost-devel
+Requires:       boost-devel
 
 %description devel
 This package contains the header files for Ogre.
