@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -25,6 +25,7 @@ Patch1:         ogre-1.6.0rc1-glew.patch
 Patch2:         ogre-1.8.1-system-tinyxml.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch5:         ogre-1.8.1-build-rcapsdump.patch
+Patch6:         ogre-thread.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -139,6 +140,7 @@ using SampleBrowser.
 %patch2 -p1 -z .sys-tinyxml
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
+%patch6 -p0 -z .thread
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -277,6 +279,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Dec 09 2012 Bruno Wolff III <bruno@wolff.to> - 1.8.1-2
+- Consuming packages using threads need to link to boost_system-mt
+
 * Fri Nov 30 2012 Martin Preisler <mpreisle@redhat.com> - 1.8.1-1
 - Update to upstream 1.8.1
 
