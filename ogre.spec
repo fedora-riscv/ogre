@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -279,6 +279,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Feb 10 2013 Denis Arnaud <denis.arnaud_fedora@m4x.org> - 1.8.1-4
+- Rebuild for Boost-1.53.0
+
 * Sat Feb 09 2013 Denis Arnaud <denis.arnaud_fedora@m4x.org> - 1.8.1-3
 - Rebuild for Boost-1.53.0
 
