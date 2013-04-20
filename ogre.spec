@@ -220,7 +220,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 # cmake macros should be in the cmake directory, not an Ogre directory
 mkdir -p %{_datadir}/cmake/MODULES
-mv %{_libdir}/OGRE/cmake %{_datadir}/cmake/MODULES/OGRE
+mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES/OGRE
 
 %post -p /sbin/ldconfig
 
