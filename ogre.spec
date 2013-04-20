@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -285,6 +285,9 @@ mv %{_libdir}/OGRE/cmake %{_datadir}/cmake/MODULES/OGRE
 
 
 %changelog
+* Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-6
+- Avoid opening plugins twice
+
 * Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-5
 - Allow for plugin names to not end in .so - bz 573672
 - Put cmake files in cmake directory instead of an Ogre directory
