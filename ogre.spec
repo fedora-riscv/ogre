@@ -143,7 +143,7 @@ using SampleBrowser.
 %patch3 -p1 -z .ppc
 %patch5 -p0 -z .build-rcapsdump
 %patch6 -p0 -z .thread
-%patch6 -p0 -z .dynlib-allow-no-so
+%patch7 -p0 -z .dynlib-allow-no-so
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
