@@ -106,6 +106,7 @@ Requires:       %{name}-terrain = %{version}-%{release}
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:       boost-devel
+Requires:       cmake
 
 %description devel
 This package contains the header files for Ogre.
@@ -217,6 +218,10 @@ ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf
 
+# cmake macros should be in the cmake directory, not an Ogre directory
+mkdir -p %{_datadir}/cmake/MODULES
+mv %{_libdir}/OGRE/cmake %{_datadir}/cmake/MODULES/OGRE
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -232,7 +237,6 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
-%exclude %{_libdir}/OGRE/cmake
 %exclude %{_datadir}/OGRE/media
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
 
@@ -261,7 +265,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %files devel
 %defattr(-,root,root,-)
 %{_libdir}/lib*Ogre*.so
-%{_libdir}/OGRE/cmake
+%{_datadir}/cmake/MODULES/OGRE
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
 
@@ -283,6 +287,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %changelog
 * Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-5
 - Allow for plugin names to not end in .so - bz 573672
+- Put cmake files in cmake directory instead of an Ogre directory
 
 * Sun Feb 10 2013 Denis Arnaud <denis.arnaud_fedora@m4x.org> - 1.8.1-4
 - Rebuild for Boost-1.53.0
