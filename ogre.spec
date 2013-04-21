@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.7.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -32,6 +32,7 @@ Patch6:         ogre-fix-utilSSE.patch
 # Some fuzz adjustments made
 Patch7:         ogre-boost_cmake.patch
 Patch8:         ogre-1.7.4-arm-ftbfs.patch
+Patch9:         ogre-1.7-dynlib-allow-no-so.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -98,6 +99,7 @@ using SampleBrowser.
 %patch6 -p0 -z .fix-utilSSE
 %patch7 -p1 -z .boost-cmake
 %patch8 -p0 -z .arm-ftbfs
+%patch9 -p0 -z .dynlib-allow-no-so
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -212,6 +214,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 
 
 %changelog
+* Sun Apr 21 2013 Bruno Wolff III <bruno@wolff.to> - 1.7.4-6
+- Backport fix for bz 573672, allow plugin names to not end in .so
+
 * Tue Oct 02 2012 Jon Ciesla <limburgher@gmail.com> - 1.7.4-5
 - Fix FTBFS on ARM, based on debian's patch.
 

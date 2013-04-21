@@ -1,0 +1,22 @@
+--- OgreMain/src/OgreDynLib.cpp.orig	2013-04-21 10:48:20.089440483 -0500
++++ OgreMain/src/OgreDynLib.cpp	2013-04-21 10:54:09.285821547 -0500
+@@ -69,7 +69,9 @@
+ 		String name = mName;
+ #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+         // dlopen() does not add .so to the filename, like windows does for .dll
+-        if (name.substr(name.length() - 3, 3) != ".so")
++        m_hInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
++        // Only add .so if open without it failed
++	if ((!m_hInst) && (name.substr(name.length() - 3, 3) != ".so"))
+            name += ".so";
+ #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+         // dlopen() does not add .dylib to the filename, like windows does for .dll
+@@ -81,7 +83,7 @@
+ 		if (name.substr(name.length() - 4, 4) != ".dll")
+ 			name += ".dll";
+ #endif
+-        m_hInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
++        if ( !m_hInst ) m_hInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
+ 
+         if( !m_hInst )
+             OGRE_EXCEPT(
