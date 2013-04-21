@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -219,8 +219,8 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf
 
 # cmake macros should be in the cmake directory, not an Ogre directory
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES
-mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES/OGRE
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
 
 %post -p /sbin/ldconfig
 
@@ -237,6 +237,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES
 %dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
+%exclude %{_libdir}/OGRE/cmake
 %exclude %{_datadir}/OGRE/media
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
 
@@ -265,7 +266,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES
 %files devel
 %defattr(-,root,root,-)
 %{_libdir}/lib*Ogre*.so
-%{_datadir}/cmake/MODULES/OGRE
+%{_datadir}/cmake/Modules/*
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
 
@@ -285,6 +286,10 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake $RPM_BUILD_ROOT%{_datadir}/cmake/MODULES
 
 
 %changelog
+* Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-7
+- cmake scripts need to be at the top level
+- Fix MODULES/Modules oops
+
 * Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-6
 - Avoid opening plugins twice
 
