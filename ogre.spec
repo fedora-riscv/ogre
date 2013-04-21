@@ -61,6 +61,7 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:	boost-devel
+Requires:       cmake
 
 %description devel
 This package contains the header files for Ogre.
@@ -172,6 +173,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf       
 
+makedir -p $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+install -p -m 644 $RPM_BUILD_ROOT%{_datadir}/cmake/Modules/FindOGRE.cmake
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -197,6 +201,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %{_libdir}/lib*Ogre*.so
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
+%{_datadir}/cmake/Modules/*
 
 %files devel-doc
 %defattr(-,root,root,-)
@@ -216,6 +221,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
 %changelog
 * Sun Apr 21 2013 Bruno Wolff III <bruno@wolff.to> - 1.7.4-6
 - Backport fix for bz 573672, allow plugin names to not end in .so
+- Backport fix for bz 918421, put FindOGRE.cmake somewhere useful
 
 * Tue Oct 02 2012 Jon Ciesla <limburgher@gmail.com> - 1.7.4-5
 - Fix FTBFS on ARM, based on debian's patch.
