@@ -173,8 +173,9 @@ ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
 ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf       
 
+# cmake macros should be in the cmake directory, not an Ogre directory
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-install -p -m 644 CMake/Packages/FindOGRE.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
 
 %post -p /sbin/ldconfig
 
@@ -193,15 +194,16 @@ install -p -m 644 CMake/Packages/FindOGRE.cmake $RPM_BUILD_ROOT%{_datadir}/cmake
 %dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
+%exclude %{_datadir}/OGRE/cmake
 %exclude %{_datadir}/OGRE/media
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
 
 %files devel
 %defattr(-,root,root,-)
 %{_libdir}/lib*Ogre*.so
+%{_datadir}/cmake/Modules/*
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
-%{_datadir}/cmake/Modules/*
 
 %files devel-doc
 %defattr(-,root,root,-)
