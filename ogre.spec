@@ -174,7 +174,7 @@ ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
   $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf       
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-install -p -m 644 $RPM_BUILD_ROOT%{_datadir}/cmake/Modules/FindOGRE.cmake
+install -p -m 644 CMake/Packages/FindOGRE.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
 
 %post -p /sbin/ldconfig
 
