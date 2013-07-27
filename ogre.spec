@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -286,6 +286,9 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 
 
 %changelog
+* Sat Jul 27 2013 pmachata@redhat.com - 1.8.1-8
+- Rebuild for boost 1.54.0
+
 * Sat Apr 20 2013 Bruno Wolff III <bruno@wolff.to> - 1.8.1-7
 - cmake scripts need to be at the top level
 - Fix MODULES/Modules oops
