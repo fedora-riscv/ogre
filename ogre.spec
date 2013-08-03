@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -286,6 +286,9 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sun Jul 28 2013 Petr Machata <pmachata@redhat.com> - 1.8.1-9
 - Update ogre-thread.patch to exclude -mt suffix from Boost.Thread and
   Boost.System DSO's.
