@@ -27,6 +27,7 @@ Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch5:         ogre-1.8.1-build-rcapsdump.patch
 Patch6:         ogre-thread.patch
 Patch7:         ogre-1.8.1-dynlib-allow-no-so.patch
+Patch8:         ogre-1.8.1-cmake-freetype.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -144,6 +145,7 @@ using SampleBrowser.
 %patch5 -p0 -z .build-rcapsdump
 %patch6 -p0 -z .thread
 %patch7 -p0 -z .dynlib-allow-no-so
+%patch8 -p1 -z .cmake-freetype
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -288,6 +290,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 %changelog
 * Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 1.8.1-11
 - Rebuild for boost 1.55.0
+- Fix detection of libfreetype (ogre-1.8.1-cmake-freetype.patch)
 
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
