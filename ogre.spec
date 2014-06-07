@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.8.1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -288,6 +288,9 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 1.8.1-11
 - Rebuild for boost 1.55.0
 - Fix detection of libfreetype (ogre-1.8.1-cmake-freetype.patch)
