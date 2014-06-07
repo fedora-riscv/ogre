@@ -1,6 +1,6 @@
 Name:           ogre
-Version:        1.8.1
-Release:        12%{?dist}
+Version:        1.9.0
+Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -12,23 +12,19 @@ Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
-# Update local glew copy to 1.6.0
+# Update local glew copy
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
-# - Non-free fonts under Samples/Media/fonts removed
 # - Non-free textures under Samples/Media/materials/textures/nvidia
 Source0:        %{name}-%{version}-clean.tar.bz2
 Patch0:         ogre-1.7.2-rpath.patch
-#Patch1:         ogre-1.6.0-system-glew.patch
-# Upstream patch to GLEW applied to new version
-Patch1:         ogre-1.6.0rc1-glew.patch
-Patch2:         ogre-1.8.1-system-tinyxml.patch
+Patch1:         ogre-1.9.0-glew.patch
 Patch3:         ogre-1.7.2-fix-ppc-build.patch
-Patch5:         ogre-1.8.1-build-rcapsdump.patch
+Patch5:         ogre-1.9.0-build-rcapsdump.patch
 Patch6:         ogre-thread.patch
-Patch7:         ogre-1.8.1-dynlib-allow-no-so.patch
-Patch8:         ogre-1.8.1-cmake-freetype.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Patch7:         ogre-1.9.0-dynlib-allow-no-so.patch
+Patch8:         ogre-1.9.0-cmake-freetype.patch
+Patch9:         ogre-1.9.0-cmake_build-fix.patch
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
@@ -37,6 +33,7 @@ BuildRequires:  boost-devel
 # BuildRequires:  poco-devel
 BuildRequires:  tinyxml-devel
 BuildRequires:  cmake
+BuildRequires:  libatomic
 BuildRequires:  cppunit-devel
 
 %description
@@ -85,6 +82,23 @@ Requires:       %{name} = %{version}-%{release}
 OGRE's terrain component provides rendering of terrain represented by
 heightmaps.
 
+%package overlay
+Summary:        OGRE overlay component
+Requires:       %{name} = %{version}-%{release}
+
+%description overlay
+Overlays allow you to render 2D and 3D elements on top of the normal scene
+contents to create effects like heads-up displays (HUDs), menu systems,
+status panels etc.
+
+%package volume
+Summary:        OGRE component for volume rendering
+Requires:       %{name} = %{version}-%{release}
+
+%description volume
+This component used to render volumes. It can handle any volume data but
+featurewise has a tedency towards terrains.
+
 %package utils
 Summary:        OGRE production pipeline utilities
 Group:          Development/Tools
@@ -113,18 +127,6 @@ Requires:       cmake
 This package contains the header files for Ogre.
 Install this package if you want to develop programs that use Ogre.
 
-
-%package devel-doc
-Summary:        Ogre development documentation
-Group:          Documentation
-Requires:       %{name} = %{version}-%{release}
-BuildRequires:  doxygen
-
-%description devel-doc
-This package contains the Ogre API documentation and the Ogre development
-manual. Install this package if you want to develop programs that use Ogre.
-
-
 %package samples
 Summary:        Ogre samples executables and media
 Group:          Development/Libraries
@@ -138,14 +140,15 @@ using SampleBrowser.
 
 %prep
 %setup -q
-%patch0 -p1 -z .rpath
-%patch1 -p0 -z .glew
-%patch2 -p1 -z .sys-tinyxml
-%patch3 -p1 -z .ppc
-%patch5 -p0 -z .build-rcapsdump
-%patch6 -p0 -z .thread
-%patch7 -p0 -z .dynlib-allow-no-so
-%patch8 -p1 -z .cmake-freetype
+mkdir build
+%patch0 -p1 -b .rpath
+%patch1 -p1 -b .glew
+%patch3 -p1 -b .ppc
+%patch5 -p1 -b .build-rcapsdump
+%patch6 -p0 -b .thread
+%patch7 -p1 -b .dynlib-allow-no-so
+%patch8 -p1 -b .cmake-freetype
+%patch9 -p1 -b .cmake_build-fix
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -153,83 +156,57 @@ chmod -x `find RenderSystems/GL -type f` \
 #  Samples/Common/bin/resources.cfg
 # Remove spurious execute bits from some Media files
 chmod -x `find Samples/Media/DeferredShadingMedia -type f`
-# create a clean version of the api docs for %%doc
-mkdir api
-find . \( -wholename './Docs/api/html/*.html' -or \
-  -wholename './Docs/api/html/*.gif' -or -wholename './Docs/api/html/*.png' \
-  -or -wholename './Docs/api/html/*.css' \) -exec cp --target-directory='api' '{}' +
-for i in api/OgreParticleEmitter_8h_source.html \
-         api/classOgre_1_1ParticleSystem.html \
-         api/classOgre_1_1DynLib.html \
-         api/classOgre_1_1ParticleEmitter.html; do
-  iconv -f ISO_8859-2 -t UTF8 $i > api/tmp
-  touch -r $i api/tmp
-  mv api/tmp $i
-done
 # Add mit.txt symlink for links in License.html
 rm -r Docs/licenses/*
 ln -s ../COPYING Docs/licenses/mit.txt
 # remove included tinyxml headers to ensure use of system headers
 rm Tools/XMLConverter/include/tiny*
 
-
 %build
-mkdir build
-cd build
-%cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
-make %{?_smp_mflags}
+pushd build
+  %cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
+  make %{?_smp_mflags}
+popd
 
 %install
-cd build
-make DESTDIR=$RPM_BUILD_ROOT install
+pushd build
+  %make_install
+popd
 
 # Create config for ldconfig
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d
-echo "%{_libdir}/OGRE" > $RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo "%{_libdir}/OGRE" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 
 # Install the samples
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-install -p -m 644 lib/Sample_*.so $RPM_BUILD_ROOT%{_libdir}/OGRE/Samples
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/OGRE
+mkdir -p %{buildroot}%{_libdir}/OGRE/Samples
+mkdir -p %{buildroot}%{_sysconfdir}/OGRE
 for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
-  install -p -m 644 inst/bin/release/$cfg \
-    $RPM_BUILD_ROOT%{_sysconfdir}/OGRE/
+  mv %{buildroot}%{_datadir}/OGRE/$cfg %{buildroot}%{_sysconfdir}/OGRE/
 done
 
 # Swap out reference to non-free quake map that was removed
-cat << EOF > $RPM_BUILD_ROOT%{_sysconfdir}/OGRE/quakemap.cfg
+cat << EOF > %{buildroot}%{_sysconfdir}/OGRE/quakemap.cfg
 Archive: /usr/share/OGRE/media/packs/ogretestmap.zip 
 Map: ogretestmap.bsp
 EOF
 
 # Fixing bug with wrong case for media
-mv ../Samples/Media/PCZAppMedia/ROOM_NY.mesh ../Samples/Media/PCZAppMedia/room_ny.mesh
-mv ../Samples/Media/PCZAppMedia/ROOM_PY.mesh ../Samples/Media/PCZAppMedia/room_py.mesh
-install -p -m 755 bin/SampleBrowser $RPM_BUILD_ROOT%{_bindir}/SampleBrowser
+mkdir -p %{buildroot}%{_datadir}/OGRE/
+mv %{buildroot}%{_datadir}/OGRE/Media %{buildroot}%{_datadir}/OGRE/media
+mv %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/ROOM_NY.mesh %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/room_ny.mesh
+mv %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/ROOM_PY.mesh %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/room_py.mesh
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/OGRE/
-cp -a ../Samples/Media $RPM_BUILD_ROOT%{_datadir}/OGRE/media
-rm -f $RPM_BUILD_ROOT%{_datadir}/OGRE/media/CMakeLists.txt
-
-ln -s ../../../../fonts/dejavu/DejaVuSans-Bold.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluebold.ttf
-ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluehigh.ttf
-ln -s ../../../../fonts/dejavu/DejaVuSansCondensed.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/bluecond.ttf
-ln -s ../../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/OGRE/media/fonts/solo5.ttf
+rm -f %{buildroot}%{_datadir}/OGRE/docs/CMakeLists.txt
 
 # cmake macros should be in the cmake directory, not an Ogre directory
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+mkdir -p %{buildroot}%{_datadir}/cmake/Modules
+mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS BUGS COPYING
 %doc Docs/ChangeLog.html Docs/License.html Docs/licenses Docs/ReadMe.html Docs/style.css Docs/ogre-logo*.gif
 %{_libdir}/libOgreMain.so.*
@@ -244,40 +221,35 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/*
 
 %files paging
-%defattr(-,root,root,-)
 %{_libdir}/libOgrePaging.so.*
 
 %files property
-%defattr(-,root,root,-)
 %{_libdir}/libOgreProperty.so.*
 
 %files rtss
-%defattr(-,root,root,-)
 %{_libdir}/libOgreRTShaderSystem.so.*
 
 %files terrain
-%defattr(-,root,root,-)
 %{_libdir}/libOgreTerrain.so.*
 
+%files overlay
+%{_libdir}/libOgreOverlay.so.*
+
+%files volume
+%{_libdir}/libOgreVolume.so.*
+
 %files utils
-%defattr(-,root,root,-)
 %{_bindir}/OgreMeshUpgrader
 %{_bindir}/OgreXMLConverter
 %{_bindir}/rcapsdump
 
 %files devel
-%defattr(-,root,root,-)
 %{_libdir}/lib*Ogre*.so
 %{_datadir}/cmake/Modules/*
 %{_includedir}/OGRE
 %{_libdir}/pkgconfig/*.pc
 
-%files devel-doc
-%defattr(-,root,root,-)
-%doc api Docs/manual Docs/shadows Docs/vbo-update Docs/style.css
-
 %files samples
-%defattr(-,root,root)
 %{_bindir}/SampleBrowser
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/media
@@ -288,6 +260,10 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 
 
 %changelog
+* Sat Jun 07 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-1
+- 1.9.0 upstream release (RHBZ #1104309)
+- cleanup spec
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8.1-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
@@ -346,7 +322,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 * Fri Jul 20 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
-* Tue Apr 01 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-1
+* Sun Apr 01 2012 Bruno Wolff III <bruno@wolff.to> - 1.7.4-1
 - Update to upstream 1.7.4
 - This is a minor bugfix update from 1.7.3
 
@@ -448,7 +424,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
-* Sat Feb 10 2009 Alexey Torkhov <atorkhov@gmail.com> 1.6.1-1
+* Tue Feb 10 2009 Alexey Torkhov <atorkhov@gmail.com> 1.6.1-1
 - New upstream release 1.6.1
 
 * Tue Jan 20 2009 Hans de Goede <hdegoede@redhat.com> 1.6.0-5
@@ -469,7 +445,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/OGRE/cmake/* $RPM_BUILD_ROOT%{_datadir}/cmake/Modul
 - Removed non-free quake map from samples media
 - Added docs license in License tag
 
-* Sat Sep 21 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1.rc1
+* Sun Sep 21 2008 Alexey Torkhov <atorkhov@gmail.com> 1.6.0-0.1.rc1
 - New upstream release 1.6.0rc1
 - Disabling broken OpenEXR plugin, it is not updated for long time and doesn't
   compile. FreeImage now have EXR support

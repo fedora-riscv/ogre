@@ -1,0 +1,23 @@
+diff -uNr ogre-1.9.0/OgreMain/src/OgreDynLib.cpp ogre-1.9.0.dynlib-allow-no-so/OgreMain/src/OgreDynLib.cpp
+--- ogre-1.9.0/OgreMain/src/OgreDynLib.cpp	2013-12-01 21:28:12.000000000 +0400
++++ ogre-1.9.0.dynlib-allow-no-so/OgreMain/src/OgreDynLib.cpp	2014-06-07 22:22:44.500257614 +0400
+@@ -76,7 +76,9 @@
+ 		String name = mName;
+ #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_NACL
+         // dlopen() does not add .so to the filename, like windows does for .dll
+-        if (name.find(".so") == String::npos)
++        mInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
++        // Only add .so if open without it failed
++        if ((!mInst) && (name.find(".so") == String::npos))
+         {
+             name += ".so.";
+             name += StringConverter::toString(OGRE_VERSION_MAJOR) + ".";
+@@ -93,7 +95,7 @@
+ 		if (name.substr(name.length() - 4, 4) != ".dll")
+ 			name += ".dll";
+ #endif
+-        mInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
++        if( !mInst ) mInst = (DYNLIB_HANDLE)DYNLIB_LOAD( name.c_str() );
+ #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+         if(!mInst)
+         {

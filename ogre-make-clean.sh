@@ -3,34 +3,31 @@
 set -e
 set -x
 
-version=1.8.1
+version=1.9.0
 
 [ ! -e ogre-${version} ]
 
-tar xjf ogre_src_v$(echo ${version} | tr . -).tar.bz2
+rpm -q mercurial
+hg clone https://bitbucket.org/sinbad/ogre ogre-${version}
+hg archive -R ogre-${version} -r v$(echo ${version} | tr . -) -t tbz2 ogre-${version}.tar.bz2
+rm -rf ogre-${version}
 
-cd ogre_src_v$(echo ${version} | tr . -)
+# Clean up
+tar xjf ogre-${version}.tar.bz2
+pushd ogre-${version}
+  # - Non-free licensed headers under RenderSystems/GL/include/GL removed
+  rm RenderSystems/GL/include/GL/{gl,glext,glxext,glxtokens,wglext}.h
 
-# - Non-free licensed headers under RenderSystems/GL/include/GL removed
-rm RenderSystems/GL/include/GL/{gl,glext,glxext,glxtokens,wglext}.h
+  # - GLEW sources updated
+  rpm -q glew-devel glew-debuginfo
+  cp -f /usr/include/GL/{glew,glxew,wglew}.h RenderSystems/GL/include/GL/
+  cp -f /usr/src/debug/glew-*/src/glew.c RenderSystems/GL/src/glew.cpp
+  dos2unix RenderSystems/GL/src/glew.cpp
 
-# - GLEW sources updated to 1.6.0
-rpm -q glew-devel glew-debuginfo
-cp -f /usr/include/GL/{glew,glxew,wglew}.h RenderSystems/GL/include/GL/
-cp -f /usr/src/debug/glew-*/src/glew.c RenderSystems/GL/src/glew.cpp
-dos2unix RenderSystems/GL/src/glew.cpp
+  # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
+  rm Samples/Media/packs/chiropteraDM.{pk3,txt}
 
-# - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
-rm Samples/Media/packs/chiropteraDM.{pk3,txt}
-
-# - Non-free fonts under Samples/Media/fonts removed
-rm Samples/Media/fonts/{bluebold,bluecond,bluehigh,solo5}.ttf
-
-# - Non-free textures under Samples/Media/materials/textures/nvidia removed
-rm Samples/Media/materials/textures/nvidia/*
-
-cd ..
-
-mv ogre_src_v$(echo ${version} | tr . -) ogre-${version}
-
-tar cjf ogre-$version-clean.tar.bz2 ogre-${version}
+  # - Non-free textures under Samples/Media/materials/textures/nvidia removed
+  rm Samples/Media/materials/textures/nvidia/*
+popd
+tar cjf ogre-${version}-clean.tar.bz2 ogre-${version}
