@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -8,7 +8,6 @@ Summary:        Object-Oriented Graphics Rendering Engine
 # MIT      - shaders for DeferredShadingMedia samples
 # Public Domain - Some of the build files, samples and plugins
 License:        MIT with exceptions and CC-BY-SA and Freely redistributable without restriction
-Group:          System Environment/Libraries
 URL:            http://www.ogre3d.org/
 # This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
@@ -47,8 +46,7 @@ intuitive classes.
 
 %package paging
 Summary:        OGRE component for terrain paging
-Group:          System Environment/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description paging
 Provides paging functionality. In essence it allows worlds to be rendered
@@ -56,8 +54,7 @@ and loaded at the same time.
 
 %package property
 Summary:        OGRE component for property introspection
-Group:          System Environment/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description property
 OGRE's property system allows you to associate values of arbitrary type with
@@ -65,8 +62,7 @@ names, and have those values exposed via a self-describing interface.
 
 %package rtss
 Summary:        OGRE RT Shader System component
-Group:          System Environment/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description rtss
 The Real Time Shader System, or RTSS for short, is a component of Ogre. This
@@ -75,8 +71,7 @@ properties, scene setup and other user definitions.
 
 %package terrain
 Summary:        OGRE component for terrain rendering
-Group:          System Environment/Libraries
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description terrain
 OGRE's terrain component provides rendering of terrain represented by
@@ -84,7 +79,7 @@ heightmaps.
 
 %package overlay
 Summary:        OGRE overlay component
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description overlay
 Overlays allow you to render 2D and 3D elements on top of the normal scene
@@ -93,7 +88,7 @@ status panels etc.
 
 %package volume
 Summary:        OGRE component for volume rendering
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description volume
 This component used to render volumes. It can handle any volume data but
@@ -113,15 +108,19 @@ them to the latest version.
 %package devel
 Summary:        Ogre header files and documentation
 Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}
-Requires:       %{name}-paging = %{version}-%{release}
-Requires:       %{name}-property = %{version}-%{release}
-Requires:       %{name}-rtss = %{version}-%{release}
-Requires:       %{name}-terrain = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-paging%{?_isa} = %{version}-%{release}
+Requires:       %{name}-property%{?_isa} = %{version}-%{release}
+Requires:       %{name}-rtss%{?_isa} = %{version}-%{release}
+Requires:       %{name}-terrain%{?_isa} = %{version}-%{release}
+Requires:       %{name}-overlay%{?_isa} = %{version}-%{release}
+Requires:       %{name}-volume%{?_isa} = %{version}-%{release}
+
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:       boost-devel
 Requires:       cmake
+Obsoletes:      %{name}-doc <= %{version}-%{release}
 
 %description devel
 This package contains the header files for Ogre.
@@ -129,8 +128,7 @@ Install this package if you want to develop programs that use Ogre.
 
 %package samples
 Summary:        Ogre samples executables and media
-Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}, dejavu-sans-fonts
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
@@ -260,6 +258,10 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Sun Jun 08 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-2
+- obsolete ogre-devel-doc
+- fix requiring base package
+
 * Sat Jun 07 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-1
 - 1.9.0 upstream release (RHBZ #1104309)
 - cleanup spec
