@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -120,7 +120,7 @@ Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:       boost-devel
 Requires:       cmake
-Obsoletes:      %{name}-doc <= %{version}-%{release}
+Obsoletes:      %{name}-devel-doc <= %{version}-%{release}
 
 %description devel
 This package contains the header files for Ogre.
@@ -258,6 +258,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Sun Jun 08 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-3
+- properly obsolete ogre-devel-doc
+
 * Sun Jun 08 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-2
 - obsolete ogre-devel-doc
 - fix requiring base package
