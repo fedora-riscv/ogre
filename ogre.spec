@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -24,6 +24,7 @@ Patch6:         ogre-thread.patch
 Patch7:         ogre-1.9.0-dynlib-allow-no-so.patch
 Patch8:         ogre-1.9.0-cmake-freetype.patch
 Patch9:         ogre-1.9.0-cmake_build-fix.patch
+Patch10:        ogre-aarch64.patch
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
@@ -147,6 +148,7 @@ mkdir build
 %patch7 -p1 -b .dynlib-allow-no-so
 %patch8 -p1 -b .cmake-freetype
 %patch9 -p1 -b .cmake_build-fix
+%patch10 -p1
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -258,6 +260,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Tue Jun 17 2014 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 1.9.0-4
+- fixed AArch64 identification macro
+
 * Sun Jun 08 2014 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.9.0-3
 - properly obsolete ogre-devel-doc
 
