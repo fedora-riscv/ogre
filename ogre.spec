@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -260,6 +260,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Thu Mar 26 2015 Kalev Lember <kalevlember@gmail.com> - 1.9.0-7
+- Rebuilt for GCC 5 ABI change
+
 * Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 1.9.0-6
 - Rebuild for boost 1.57.0
 
