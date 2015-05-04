@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -35,6 +35,7 @@ BuildRequires:  tinyxml-devel
 BuildRequires:  cmake
 BuildRequires:  libatomic
 BuildRequires:  cppunit-devel
+Provides:       bundled(wxScintilla) = 1.69.2
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -260,6 +261,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Mon May 04 2015 Jason L Tibbitts III <tibbs@math.uh.edu> - 1.9.0-8
+- Indicate that this package bundles wxScintilla 1.69.2.
+
 * Thu Mar 26 2015 Kalev Lember <kalevlember@gmail.com> - 1.9.0-7
 - Rebuilt for GCC 5 ABI change
 
