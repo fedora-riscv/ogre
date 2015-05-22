@@ -25,6 +25,10 @@ Patch7:         ogre-1.9.0-dynlib-allow-no-so.patch
 Patch8:         ogre-1.9.0-cmake-freetype.patch
 Patch9:         ogre-1.9.0-cmake_build-fix.patch
 Patch10:        ogre-aarch64.patch
+# Resolve link errors due to incorrect template creation
+# https://bitbucket.org/sinbad/ogre/commits/a24ac4afbbb9dc5ff49a61634af50da11ba8fb97/
+# https://bugzilla.redhat.com/show_bug.cgi?id=1223612
+Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
@@ -150,6 +154,7 @@ mkdir build
 %patch8 -p1 -b .cmake-freetype
 %patch9 -p1 -b .cmake_build-fix
 %patch10 -p1
+%patch11 -p1
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -261,6 +266,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Thu May 21 2015 Orion Poplawski <orion@cora.nra.com> - 1.9.0-8
+- Add patch to resolve link errors due to incorrect template creation (fix FTBFS bug #1223612)
+
 * Mon May 04 2015 Jason L Tibbitts III <tibbs@math.uh.edu> - 1.9.0-8
 - Indicate that this package bundles wxScintilla 1.69.2.
 
