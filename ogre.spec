@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -125,6 +125,7 @@ Requires:       %{name}-volume%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:       boost-devel
+Requires:       glew-devel
 Requires:       cmake
 Obsoletes:      %{name}-devel-doc <= %{version}-%{release}
 
@@ -266,6 +267,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Tue Jul 07 2015 Bruno Wolff III <bruno@wolff.to> = 1.9.0-10
+- ogre-devel requires glew-devel for headers
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
