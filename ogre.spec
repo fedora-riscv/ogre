@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -267,6 +267,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Wed Jul 22 2015 David Tardon <dtardon@redhat.com> - 1.9.0-11
+- rebuild for Boost 1.58
+
 * Tue Jul 07 2015 Bruno Wolff III <bruno@wolff.to> = 1.9.0-10
 - ogre-devel requires glew-devel for headers
 
