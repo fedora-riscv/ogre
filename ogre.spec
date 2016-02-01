@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -22,6 +22,7 @@ Patch3:         ogre-1.7.2-fix-ppc-build.patch
 Patch5:         ogre-1.9.0-build-rcapsdump.patch
 Patch6:         ogre-thread.patch
 Patch7:         ogre-1.9.0-dynlib-allow-no-so.patch
+# FIXME: Patch is bogus on Fedora >= 24
 Patch8:         ogre-1.9.0-cmake-freetype.patch
 Patch9:         ogre-1.9.0-cmake_build-fix.patch
 Patch10:        ogre-aarch64.patch
@@ -152,7 +153,13 @@ mkdir build
 %patch5 -p1 -b .build-rcapsdump
 %patch6 -p0 -b .thread
 %patch7 -p1 -b .dynlib-allow-no-so
+%if (%{?fedora} > 20) && (0%{?fedora} < 24)
+# freetype header chaos:
+# Fedora <= 20    headers in /usr/include/freetype2/freetype
+# Fedora 21,22,23 headers in /usr/include/freetype2
+# Fedora >= 24    headers in /usr/include/freetype2/freetype
 %patch8 -p1 -b .cmake-freetype
+%endif
 %patch9 -p1 -b .cmake_build-fix
 %patch10 -p1
 %patch11 -p1
@@ -267,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Mon Feb 01 2016 Ralf Corsépius <corsepiu@fedoraproject.org> - 1.9.0-14
+- Do not apply ogre-1.9.0-cmake-freetype.patch on fedora >= 24 (Fix FTBS).
+
 * Thu Aug 27 2015 Jonathan Wakely <jwakely@redhat.com> - 1.9.0-13
 - Rebuilt for Boost 1.59
 
