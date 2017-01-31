@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        15%{?dist}
+Release:        16%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -274,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Tue Jan 31 2017 Jonathan Wakely <jwakely@redhat.com> - 1.9.0-16
+- Rebuilt for Boost 1.63
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-15
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
