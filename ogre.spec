@@ -1,6 +1,6 @@
 Name:           ogre
 Version:        1.9.0
-Release:        18%{?dist}
+Release:        19%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -274,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Wed Jul 19 2017 Jonathan Wakely <jwakely@redhat.com> - 1.9.0-19
+- Rebuilt for s390x binutils bug
+
 * Mon Jul 03 2017 Jonathan Wakely <jwakely@redhat.com> - 1.9.0-18
 - Rebuilt for Boost 1.64
 
