@@ -30,6 +30,7 @@ Patch10:        ogre-aarch64.patch
 # https://bitbucket.org/sinbad/ogre/commits/a24ac4afbbb9dc5ff49a61634af50da11ba8fb97/
 # https://bugzilla.redhat.com/show_bug.cgi?id=1223612
 Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
+BuildRequires:  gcc-c++
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
 BuildRequires:  ois-devel freeimage-devel openexr-devel
