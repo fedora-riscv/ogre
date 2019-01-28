@@ -104,7 +104,6 @@ featurewise has a tedency towards terrains.
 
 %package utils
 Summary:        OGRE production pipeline utilities
-Group:          Development/Tools
 Requires:       %{name} = %{version}-%{release}
 
 %description utils
@@ -115,7 +114,6 @@ them to the latest version.
 
 %package devel
 Summary:        Ogre header files and documentation
-Group:          Development/Libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-paging%{?_isa} = %{version}-%{release}
 Requires:       %{name}-property%{?_isa} = %{version}-%{release}
