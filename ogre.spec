@@ -30,6 +30,9 @@ Patch10:        ogre-aarch64.patch
 # https://bitbucket.org/sinbad/ogre/commits/a24ac4afbbb9dc5ff49a61634af50da11ba8fb97/
 # https://bugzilla.redhat.com/show_bug.cgi?id=1223612
 Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
+# Remove unnecessary inclusion of <sys/sysctl.h>
+# https://bugzilla.redhat.com/show_bug.cgi?id=1841324
+Patch12:        ogre-1.9.0-sysctl.patch
 BuildRequires:  gcc-c++
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -162,6 +165,7 @@ mkdir build
 %patch9 -p1 -b .cmake_build-fix
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -275,6 +279,7 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 %changelog
 * Thu May 28 2020 Jonathan Wakely <jwakely@redhat.com> - 1.9.0-29
 - Rebuilt for Boost 1.73
+- Patched for glibc 2.32 (#1841324)
 
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-28
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
