@@ -1,7 +1,7 @@
 %undefine __cmake_in_source_build
 
 Name:           ogre
-Version:        1.12.6
+Version:        1.12.9
 Release:        1%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -17,15 +17,11 @@ URL:            http://www.ogre3d.org/
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # - Non-free textures under Samples/Media/materials/textures/nvidia
-Source0:        https://github.com/OGRECave/ogre/archive/v%{version}/ogre-%{version}.tar.gz
-Source1:        https://github.com/ocornut/imgui/archive/v1.76/imgui-1.76.tar.gz
+Source0:        ogre-%{version}-clean.tar.xz
+Source1:        https://github.com/ocornut/imgui/archive/v1.77/imgui-1.77.tar.gz
 Patch0:         ogre-1.7.2-rpath.patch
 #Patch5:         ogre-1.9.0-build-rcapsdump.patch
 Patch6:         ogre-thread.patch
-# Remove unnecessary inclusion of <sys/sysctl.h>
-# https://bugzilla.redhat.com/show_bug.cgi?id=1841324
-Patch12:        ogre-1.9.0-sysctl.patch
-Patch13:        Bitwise.patch
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  boost-devel
@@ -52,8 +48,6 @@ Buildrequires:  qt5-qtbase-devel
 #Buildrequires:  java-devel
 Buildrequires:  pugixml-devel
 Buildrequires:  tinyxml-devel
-
-#Provides:       bundled(wxScintilla) = 1.69.2
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -157,18 +151,10 @@ using SampleBrowser.
 
 %prep
 %setup -q -a1
-# move imgui into submodule place
-rmdir Components/Overlay/src/imgui/
-mv imgui-1.*/ Components/Overlay/src/imgui/
-rm RenderSystems/GL/include/GL/{gl,glext}.h
 %patch0 -p1 -b .rpath
 %patch6 -p0 -b .thread
-%patch12 -p1
-%patch13 -p1
 
-# remove execute bits from src-files for -debuginfo package
-find . -type f -name "*.h" -o -name "*.cpp" -exec chmod 644 {} \;
-
+%{_fixperms} .
 
 %build
 %{cmake} -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 \
@@ -178,6 +164,7 @@ find . -type f -name "*.h" -o -name "*.cpp" -exec chmod 644 {} \;
         -DOGRE_INSTALL_SAMPLES:BOOL=ON \
         -DOGRE_INSTALL_SAMPLES_SOURCE:BOOL=ON \
         -DOGRE_CONFIG_MEMTRACK_RELEASE:BOOL=OFF \
+        -DIMGUI_DIR=imgui-1.77 \
         -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -Wno-dev
 %{cmake_build}
 
@@ -282,6 +269,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Mon Nov 23 2020 Sérgio Basto <sergio@serjux.com> - 1.12.9-1
+- Update to 1.12.9
+
 * Sun Nov 22 2020 Sérgio Basto <sergio@serjux.com> - 1.12.6-1
 - Update to 1.12.6
 - Fix cmake build
