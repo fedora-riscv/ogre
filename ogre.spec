@@ -1,6 +1,9 @@
+%undefine __cmake_in_source_build
+
 Name:           ogre
 Version:        1.9.0
-Release:        31%{?dist}
+Release:        32%{?dist}
+Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -180,15 +183,11 @@ ln -s ../COPYING Docs/licenses/mit.txt
 rm Tools/XMLConverter/include/tiny*
 
 %build
-pushd build
-  %cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
-  make %{?_smp_mflags}
-popd
+%cmake -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
+%cmake_build
 
 %install
-pushd build
-  %make_install
-popd
+%cmake_install
 
 # Create config for ldconfig
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
@@ -218,10 +217,6 @@ rm -f %{buildroot}%{_datadir}/OGRE/docs/CMakeLists.txt
 # cmake macros should be in the cmake directory, not an Ogre directory
 mkdir -p %{buildroot}%{_datadir}/cmake/Modules
 mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
 
 %files
 %doc AUTHORS BUGS COPYING
@@ -277,6 +272,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Fri Dec 04 2020 Sérgio Basto <sergio@serjux.com> - 1:1.9.0-32
+- Fix cmake build
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-31
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
