@@ -1,8 +1,6 @@
-%undefine __cmake_in_source_build
-
 Name:           ogre
-Version:        1.12.9
-Release:        1%{?dist}
+Version:        1.9.0
+Release:        31%{?dist}
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
 # CC-BY-SA - devel docs
@@ -11,43 +9,42 @@ Summary:        Object-Oriented Graphics Rendering Engine
 # Public Domain - Some of the build files, samples and plugins
 License:        MIT with exceptions and CC-BY-SA and Freely redistributable without restriction
 URL:            http://www.ogre3d.org/
-# This is modified http://downloads.sourceforge.net/ogre/ogre-v%%(echo %%{version} | tr . -).tar.bz2
+# This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
 # Update local glew copy
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
 # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
 # - Non-free textures under Samples/Media/materials/textures/nvidia
-Source0:        ogre-%{version}-clean.tar.xz
-Source1:        https://github.com/ocornut/imgui/archive/v1.77/imgui-1.77.tar.gz
+Source0:        %{name}-%{version}-clean.tar.bz2
 Patch0:         ogre-1.7.2-rpath.patch
-#Patch5:         ogre-1.9.0-build-rcapsdump.patch
+Patch1:         ogre-1.9.0-glew.patch
+Patch3:         ogre-1.7.2-fix-ppc-build.patch
+Patch5:         ogre-1.9.0-build-rcapsdump.patch
 Patch6:         ogre-thread.patch
+Patch7:         ogre-1.9.0-dynlib-allow-no-so.patch
+# FIXME: Patch is bogus on Fedora >= 24
+Patch8:         ogre-1.9.0-cmake-freetype.patch
+Patch9:         ogre-1.9.0-cmake_build-fix.patch
+Patch10:        ogre-aarch64.patch
+# Resolve link errors due to incorrect template creation
+# https://bitbucket.org/sinbad/ogre/commits/a24ac4afbbb9dc5ff49a61634af50da11ba8fb97/
+# https://bugzilla.redhat.com/show_bug.cgi?id=1223612
+Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
+# Remove unnecessary inclusion of <sys/sysctl.h>
+# https://bugzilla.redhat.com/show_bug.cgi?id=1841324
+Patch12:        ogre-1.9.0-sysctl.patch
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  boost-devel
-BuildRequires:  doxygen
-BuildRequires:  zziplib-devel
-BuildRequires:  freetype-devel
-BuildRequires:  libXaw-devel
-BuildRequires:  libXrandr-devel
-BuildRequires:  libXxf86vm-devel
-BuildRequires:  libGLU-devel
-BuildRequires:  ois-devel
-BuildRequires:  freeimage-devel
-BuildRequires:  openexr-devel
+BuildRequires:  zziplib-devel freetype-devel
+BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
+BuildRequires:  ois-devel freeimage-devel openexr-devel
 BuildRequires:  glew-devel
+BuildRequires:  boost-devel
 # BuildRequires:  poco-devel
 BuildRequires:  tinyxml-devel
+BuildRequires:  cmake
 BuildRequires:  libatomic
 BuildRequires:  cppunit-devel
-BuildRequires:  SDL2-devel
-BuildRequires:  harfbuzz-devel
-Buildrequires:  qt5-qtbase-devel
-#BuildRequires:  swig > 3.0.0
-#Buildrequires:  python3-devel
-#Buildrequires:  java-devel
-Buildrequires:  pugixml-devel
-Buildrequires:  tinyxml-devel
+Provides:       bundled(wxScintilla) = 1.69.2
 
 %description
 OGRE (Object-Oriented Graphics Rendering Engine) is a scene-oriented,
@@ -150,26 +147,48 @@ samples. The samples are installed in %{_libdir}/Samples/*.so and can be run
 using SampleBrowser.
 
 %prep
-%setup -q -a1
+%setup -q
+mkdir build
 %patch0 -p1 -b .rpath
+%patch1 -p1 -b .glew
+%patch3 -p1 -b .ppc
+%patch5 -p1 -b .build-rcapsdump
 %patch6 -p0 -b .thread
+%patch7 -p1 -b .dynlib-allow-no-so
+%if (%{?fedora} > 20) && (0%{?fedora} < 24)
+# freetype header chaos:
+# Fedora <= 20    headers in /usr/include/freetype2/freetype
+# Fedora 21,22,23 headers in /usr/include/freetype2
+# Fedora >= 24    headers in /usr/include/freetype2/freetype
+%patch8 -p1 -b .cmake-freetype
+%endif
+%patch9 -p1 -b .cmake_build-fix
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
 
-%{_fixperms} .
+# remove execute bits from src-files for -debuginfo package
+chmod -x `find RenderSystems/GL -type f` \
+  `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
+#  Samples/Common/bin/resources.cfg
+# Remove spurious execute bits from some Media files
+chmod -x `find Samples/Media/DeferredShadingMedia -type f`
+# Add mit.txt symlink for links in License.html
+rm -r Docs/licenses/*
+ln -s ../COPYING Docs/licenses/mit.txt
+# remove included tinyxml headers to ensure use of system headers
+rm Tools/XMLConverter/include/tiny*
 
 %build
-%{cmake} -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 \
-        -DOGRE_BUILD_DOCS:BOOL=OFF \
-        -DOGRE_BUILD_DEPENDENCIES=FALSE \
-        -DOGRE_BUILD_PLUGIN_CG:BOOL=OFF \
-        -DOGRE_INSTALL_SAMPLES:BOOL=ON \
-        -DOGRE_INSTALL_SAMPLES_SOURCE:BOOL=ON \
-        -DOGRE_CONFIG_MEMTRACK_RELEASE:BOOL=OFF \
-        -DIMGUI_DIR=imgui-1.77 \
-        -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -Wno-dev
-%{cmake_build}
+pushd build
+  %cmake .. -DOGRE_FULL_RPATH=0 -DCMAKE_SKIP_RPATH=1 -DOGRE_LIB_DIRECTORY=%{_lib} -DOGRE_BUILD_RTSHADERSYSTEM_EXT_SHADERS=1 -DOGRE_BUILD_PLUGIN_CG=0
+  make %{?_smp_mflags}
+popd
 
 %install
-%{cmake_install}
+pushd build
+  %make_install
+popd
 
 # Create config for ldconfig
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
@@ -178,15 +197,15 @@ echo "%{_libdir}/OGRE" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch
 # Install the samples
 mkdir -p %{buildroot}%{_libdir}/OGRE/Samples
 mkdir -p %{buildroot}%{_sysconfdir}/OGRE
-for cfg in plugins.cfg resources.cfg samples.cfg; do
+for cfg in plugins.cfg quakemap.cfg resources.cfg samples.cfg; do
   mv %{buildroot}%{_datadir}/OGRE/$cfg %{buildroot}%{_sysconfdir}/OGRE/
 done
 
 # Swap out reference to non-free quake map that was removed
-#cat << EOF > %{buildroot}%{_sysconfdir}/OGRE/quakemap.cfg
-#Archive: /usr/share/OGRE/media/packs/ogretestmap.zip
-#Map: ogretestmap.bsp
-#EOF
+cat << EOF > %{buildroot}%{_sysconfdir}/OGRE/quakemap.cfg
+Archive: /usr/share/OGRE/media/packs/ogretestmap.zip 
+Map: ogretestmap.bsp
+EOF
 
 # Fixing bug with wrong case for media
 mkdir -p %{buildroot}%{_datadir}/OGRE/
@@ -194,13 +213,7 @@ mv %{buildroot}%{_datadir}/OGRE/Media %{buildroot}%{_datadir}/OGRE/media
 mv %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/ROOM_NY.mesh %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/room_ny.mesh
 mv %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/ROOM_PY.mesh %{buildroot}%{_datadir}/OGRE/media/PCZAppMedia/room_py.mesh
 
-rm -f %{buildroot}%{_datadir}/doc/OGRE/CMakeLists.txt
-# Add mit.txt symlink for links in License.html
-#rm -r Docs/licenses/*
-#ln -s ../COPYING Docs/licenses/mit.txt
-rm -f Docs/licenses/mit.txt
-rm -rf %{buildroot}%{_datadir}/doc/OGRE/licenses/
-
+rm -f %{buildroot}%{_datadir}/OGRE/docs/CMakeLists.txt
 
 # cmake macros should be in the cmake directory, not an Ogre directory
 mkdir -p %{buildroot}%{_datadir}/cmake/Modules
@@ -211,17 +224,12 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 %postun -p /sbin/ldconfig
 
 %files
-%doc AUTHORS README.md
-%license LICENSE Docs/licenses/*
+%doc AUTHORS BUGS COPYING
+%doc Docs/ChangeLog.html Docs/License.html Docs/licenses Docs/ReadMe.html Docs/style.css Docs/ogre-logo*.gif
 %{_libdir}/libOgreMain.so.*
-%{_libdir}/libOgreBites.so.*
-%{_libdir}/libOgreBitesQt.so.*
-%{_libdir}/libOgreMeshLodGenerator.so.*
-%{_libdir}/libOgreGLSupport.a
 %{_libdir}/OGRE
-%{_bindir}/VRMLConverter
+
 %{_datadir}/OGRE
-%{_datadir}/doc/OGRE
 %dir %{_sysconfdir}/OGRE
 %exclude %{_bindir}/SampleBrowser
 %exclude %{_libdir}/OGRE/Samples
@@ -250,7 +258,7 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 %files utils
 %{_bindir}/OgreMeshUpgrader
 %{_bindir}/OgreXMLConverter
-#{_bindir}/rcapsdump
+%{_bindir}/rcapsdump
 
 %files devel
 %{_libdir}/lib*Ogre*.so
@@ -263,21 +271,12 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 %{_libdir}/OGRE/Samples
 %{_datadir}/OGRE/media
 %{_sysconfdir}/OGRE/plugins.cfg
-#{_sysconfdir}/OGRE/quakemap.cfg
+%{_sysconfdir}/OGRE/quakemap.cfg
 %{_sysconfdir}/OGRE/resources.cfg
 %{_sysconfdir}/OGRE/samples.cfg
 
 
 %changelog
-* Mon Nov 23 2020 Sérgio Basto <sergio@serjux.com> - 1.12.9-1
-- Update to 1.12.9
-
-* Sun Nov 22 2020 Sérgio Basto <sergio@serjux.com> - 1.12.6-1
-- Update to 1.12.6
-- Fix cmake build
-- Use upstream source and simply remove the GL headers in %prep.
-- Add Bitwise.patch for build on s390x
-
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-31
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild

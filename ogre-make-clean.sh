@@ -3,32 +3,31 @@
 set -e
 set -x
 
-version=1.12.9
+version=1.9.0
 
-[ ! -e ogre-${version} ] && wget -c https://github.com/OGRECave/ogre/archive/v${version}/ogre-${version}.tar.gz
+[ ! -e ogre-${version} ]
+
+rpm -q mercurial
+hg clone https://bitbucket.org/sinbad/ogre ogre-${version}
+hg archive -R ogre-${version} -r v$(echo ${version} | tr . -) -t tbz2 ogre-${version}.tar.bz2
+rm -rf ogre-${version}
 
 # Clean up
-tar xf ogre-${version}.tar.gz
+tar xjf ogre-${version}.tar.bz2
 pushd ogre-${version}
   # - Non-free licensed headers under RenderSystems/GL/include/GL removed
-  rm RenderSystems/GL/include/GL/{gl,glext}.h
+  rm RenderSystems/GL/include/GL/{gl,glext,glxext,glxtokens,wglext}.h
 
   # - GLEW sources updated
-  # not working glew.c:1542:1: error: unknown type name 'PFNGLPROGRAMUNIFORM2IVEXTPROC';
-  rpm -q glew-devel glew-debugsource
-  echo if package glew-debugsource is not installed, please do 'dnf debuginfo-install glew'
+  rpm -q glew-devel glew-debuginfo
   cp -f /usr/include/GL/{glew,glxew,wglew}.h RenderSystems/GL/include/GL/
-  cp -f /usr/src/debug/glew-*/src/glew.c RenderSystems/GL/src/glew.c
+  cp -f /usr/src/debug/glew-*/src/glew.c RenderSystems/GL/src/glew.cpp
+  dos2unix RenderSystems/GL/src/glew.cpp
 
-  # https://github.com/OGRECave/ogre/issues/882
   # - Non-free chiropteraDM.pk3 under Samples/Media/packs removed
-  # rm Samples/Media/packs/chiropteraDM.{pk3,txt}
-  # https://github.com/OGRECave/ogre/commit/d7dc7119720a06f5d373bc6553bae1399ab5fb2e
-  # Samples: BSP - replace chiropteraDM by OpenArena oa_rpg3dm2
+  rm Samples/Media/packs/chiropteraDM.{pk3,txt}
 
   # - Non-free textures under Samples/Media/materials/textures/nvidia removed
-  # rm Samples/Media/materials/textures/nvidia/*
-  # https://github.com/OGRECave/ogre/commit/302e970e6d56c5642f1879700ff891798c98d3b2
-  # Samples: Terrain - replace proprietary nvidia textures by cc0textures 
+  rm Samples/Media/materials/textures/nvidia/*
 popd
-tar cJf ogre-${version}-clean.tar.xz ogre-${version}
+tar cjf ogre-${version}-clean.tar.bz2 ogre-${version}
