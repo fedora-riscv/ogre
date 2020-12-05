@@ -1,0 +1,13 @@
+diff --git a/Samples/Common/include/Sample.h b/Samples/Common/include/Sample.h
+index 6064d8f..e6851a4 100644
+--- a/Samples/Common/include/Sample.h
++++ b/Samples/Common/include/Sample.h
+@@ -63,7 +63,7 @@ namespace OgreBites
+ 		=============================================================================*/
+ 		struct Comparer
+ 		{
+-			bool operator() (Sample* a, Sample* b)
++			bool operator() (Sample* a, Sample* b) const
+ 			{
+ 				Ogre::NameValuePairList::iterator aTitle = a->getInfo().find("Title");
+ 				Ogre::NameValuePairList::iterator bTitle = b->getInfo().find("Title");

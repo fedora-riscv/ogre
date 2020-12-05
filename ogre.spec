@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.9.0
-Release:        33%{?dist}
+Release:        34%{?dist}
 Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -36,6 +36,7 @@ Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
 # Remove unnecessary inclusion of <sys/sysctl.h>
 # https://bugzilla.redhat.com/show_bug.cgi?id=1841324
 Patch12:        ogre-1.9.0-sysctl.patch
+Patch13:        %{name}-gcc11.patch
 BuildRequires:  gcc-c++
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -169,6 +170,7 @@ mkdir build
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
@@ -272,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Fri Dec 04 2020 Jeff Law <law@redhat.com> - 1:1.9.0-34
+- Make comparison object invocable as const for gcc-11
+
 * Sat Dec 05 2020 Sérgio Basto <sergio@serjux.com> - 1:1.9.0-33
 - Fix epoch
 
