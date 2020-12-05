@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.9.0
-Release:        32%{?dist}
+Release:        33%{?dist}
 Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -12,7 +12,7 @@ Summary:        Object-Oriented Graphics Rendering Engine
 # Public Domain - Some of the build files, samples and plugins
 License:        MIT with exceptions and CC-BY-SA and Freely redistributable without restriction
 URL:            http://www.ogre3d.org/
-# This is modified http://downloads.sourceforge.net/ogre/ogre-v%(echo %{version} | tr . -).tar.bz2
+# This is modified http://downloads.sourceforge.net/ogre/ogre-v%%(echo %%{version} | tr . -).tar.bz2
 # with non-free files striped (see ogre-make-clean.sh):
 # Update local glew copy
 # - Non-free licensed headers under RenderSystems/GL/include/GL removed
@@ -60,7 +60,7 @@ intuitive classes.
 
 %package paging
 Summary:        OGRE component for terrain paging
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description paging
 Provides paging functionality. In essence it allows worlds to be rendered
@@ -68,7 +68,7 @@ and loaded at the same time.
 
 %package property
 Summary:        OGRE component for property introspection
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description property
 OGRE's property system allows you to associate values of arbitrary type with
@@ -76,7 +76,7 @@ names, and have those values exposed via a self-describing interface.
 
 %package rtss
 Summary:        OGRE RT Shader System component
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description rtss
 The Real Time Shader System, or RTSS for short, is a component of Ogre. This
@@ -85,7 +85,7 @@ properties, scene setup and other user definitions.
 
 %package terrain
 Summary:        OGRE component for terrain rendering
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description terrain
 OGRE's terrain component provides rendering of terrain represented by
@@ -93,7 +93,7 @@ heightmaps.
 
 %package overlay
 Summary:        OGRE overlay component
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description overlay
 Overlays allow you to render 2D and 3D elements on top of the normal scene
@@ -102,7 +102,7 @@ status panels etc.
 
 %package volume
 Summary:        OGRE component for volume rendering
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description volume
 This component used to render volumes. It can handle any volume data but
@@ -110,7 +110,7 @@ featurewise has a tedency towards terrains.
 
 %package utils
 Summary:        OGRE production pipeline utilities
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description utils
 Contains OgreXMLConverter, it can take .mesh.xml files and convert them into
@@ -120,20 +120,20 @@ them to the latest version.
 
 %package devel
 Summary:        Ogre header files and documentation
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{name}-paging%{?_isa} = %{version}-%{release}
-Requires:       %{name}-property%{?_isa} = %{version}-%{release}
-Requires:       %{name}-rtss%{?_isa} = %{version}-%{release}
-Requires:       %{name}-terrain%{?_isa} = %{version}-%{release}
-Requires:       %{name}-overlay%{?_isa} = %{version}-%{release}
-Requires:       %{name}-volume%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-paging%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-property%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-rtss%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-terrain%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-overlay%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-volume%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 Requires:       pkgconfig
 # Requires:       poco-devel
 Requires:       boost-devel
 Requires:       glew-devel
 Requires:       cmake
-Obsoletes:      %{name}-devel-doc <= %{version}-%{release}
+Obsoletes:      %{name}-devel-doc <= %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 This package contains the header files for Ogre.
@@ -141,7 +141,7 @@ Install this package if you want to develop programs that use Ogre.
 
 %package samples
 Summary:        Ogre samples executables and media
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description samples
 This package contains the compiled (not the source) sample applications coming
@@ -158,7 +158,7 @@ mkdir build
 %patch5 -p1 -b .build-rcapsdump
 %patch6 -p0 -b .thread
 %patch7 -p1 -b .dynlib-allow-no-so
-%if (%{?fedora} > 20) && (0%{?fedora} < 24)
+%if (0%{?fedora} > 20) && (0%{?fedora} < 24)
 # freetype header chaos:
 # Fedora <= 20    headers in /usr/include/freetype2/freetype
 # Fedora 21,22,23 headers in /usr/include/freetype2
@@ -272,6 +272,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Sat Dec 05 2020 Sérgio Basto <sergio@serjux.com> - 1:1.9.0-33
+- Fix epoch
+
 * Fri Dec 04 2020 Sérgio Basto <sergio@serjux.com> - 1:1.9.0-32
 - Fix cmake build
 
