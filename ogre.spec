@@ -283,6 +283,15 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 * Fri Dec 04 2020 Sérgio Basto <sergio@serjux.com> - 1:1.9.0-32
 - Fix cmake build
 
+* Mon Nov 23 2020 Sérgio Basto <sergio@serjux.com> - 1.12.9-1
+- Update to 1.12.9
+
+* Sun Nov 22 2020 Sérgio Basto <sergio@serjux.com> - 1.12.6-1
+- Update to 1.12.6
+- Fix cmake build
+- Use upstream source and simply remove the GL headers in %prep.
+- Add Bitwise.patch for build on s390x
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-31
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
