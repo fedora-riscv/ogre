@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.9.0
-Release:        34%{?dist}
+Release:        35%{?dist}
 Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -274,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Fri Jan 22 2021 Jonathan Wakely <jwakely@redhat.com> - 1:1.9.0-35
+- Rebuilt for Boost 1.75
+
 * Fri Dec 04 2020 Jeff Law <law@redhat.com> - 1:1.9.0-34
 - Make comparison object invocable as const for gcc-11
 
