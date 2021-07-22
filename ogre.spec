@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.9.0
-Release:        37%{?dist}
+Release:        38%{?dist}
 Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -274,6 +274,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.9.0-38
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Tue Mar 30 2021 Jonathan Wakely <jwakely@redhat.com> - 1:1.9.0-37
 - Rebuilt for removed libstdc++ symbol (#1937698)
 
