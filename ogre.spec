@@ -2,7 +2,7 @@
 
 Name:           ogre
 Version:        1.9.0
-Release:        42%{?dist}
+Release:        42.rv64%{?dist}
 Epoch:          1
 Summary:        Object-Oriented Graphics Rendering Engine
 # MIT with exceptions - main library
@@ -37,6 +37,10 @@ Patch11:        ogre-a24ac4afbbb9dc5ff49a61634af50da11ba8fb97.diff
 # https://bugzilla.redhat.com/show_bug.cgi?id=1841324
 Patch12:        ogre-1.9.0-sysctl.patch
 Patch13:        %{name}-gcc11.patch
+
+# riscv64 support
+Patch14:        ogre-riscv64.patch
+
 BuildRequires:  gcc-c++
 BuildRequires:  zziplib-devel freetype-devel
 BuildRequires:  libXaw-devel libXrandr-devel libXxf86vm-devel libGLU-devel
@@ -172,6 +176,8 @@ mkdir build
 %patch12 -p1
 %patch13 -p1
 
+%patch14 -p1 -b .riscv64
+
 # remove execute bits from src-files for -debuginfo package
 chmod -x `find RenderSystems/GL -type f` \
   `find Samples/DeferredShading -type f` Samples/DynTex/src/DynTex.cpp
@@ -274,6 +280,9 @@ mv %{buildroot}%{_libdir}/OGRE/cmake/* %{buildroot}%{_datadir}/cmake/Modules
 
 
 %changelog
+* Mon Mar 6 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 1:1.9.0-42.rv64
+- Add riscv64 support.
+
 * Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.9.0-42
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
